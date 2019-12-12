@@ -3,7 +3,7 @@ using System.Net;
 using Amazon.Lambda.APIGatewayEvents;
 using Xerris.DotNet.Core.Extensions;
 
-namespace Xerris.DotNet.Core.Aws.Api.Gateway
+namespace Xerris.DotNet.Core.Aws.Api
 {
     public static class ResponseBuilder
     {
@@ -16,7 +16,7 @@ namespace Xerris.DotNet.Core.Aws.Api.Gateway
             {"Content-type", "application/json; charset=UTF-8"}
         };
 
-        public static APIGatewayProxyResponse Ok(string payload)
+        public static APIGatewayProxyResponse Ok(this string payload)
         {
             return new APIGatewayProxyResponse
             {
@@ -56,7 +56,7 @@ namespace Xerris.DotNet.Core.Aws.Api.Gateway
             };
         }
         
-        public static APIGatewayProxyResponse Error(string payload = null)
+        public static APIGatewayProxyResponse Error(this string payload)
         {
             return new APIGatewayProxyResponse
             {
@@ -76,7 +76,17 @@ namespace Xerris.DotNet.Core.Aws.Api.Gateway
             };
         }
 
-        public static APIGatewayProxyResponse UnAuthorized()
+        public static APIGatewayProxyResponse BadRequest<T>(this T payload)
+        {
+            return new APIGatewayProxyResponse
+            {
+                StatusCode = (int) HttpStatusCode.BadRequest,
+                Body = payload.ToJson(),
+                Headers = Headers
+            };
+        }
+
+        public static APIGatewayProxyResponse UnAuthorized(this object item)
         {
             return new APIGatewayProxyResponse
             {
