@@ -5,7 +5,7 @@
   "name": "xerris.dotnet.core.aws",
   "version": "1.0.0",
   "description": "",
-  "author": "Nutrien",
+  "author": "Xerris",
   "license": "ISC",
   "dependencies": {
     "del": "^5.1.0",
