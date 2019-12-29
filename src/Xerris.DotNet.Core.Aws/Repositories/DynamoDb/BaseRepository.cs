@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Xerris.DotNet.Core.Extensions;
+using DynamoTable=Amazon.DynamoDBv2.DocumentModel;
 
 namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
 {
@@ -12,23 +14,33 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
         Task SaveAsync(T toUpdate);
         Task DeleteAsync(T toDelete);
     }
+    
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         private readonly IAmazonDynamoDB client;
 
-        protected Table Table { get; }
+        private ITable Table { get; }
         
-        protected BaseRepository(IAmazonDynamoDB client, string tableName)
+        protected BaseRepository(IAmazonDynamoDB client, string tableName) : this(client, TableProxy.Create(client, tableName))
+        {
+        }
+
+        protected BaseRepository(IAmazonDynamoDB client, ITable table)
         {
             this.client = client;
-            Table = Table.LoadTable(client, tableName);
+            Table = table;
         }
 
         protected async Task<TU> FindOneAsync<TU>(ScanCondition where, bool allowNull = true)
         {
+            return await FindOneAsync<TU>(new[] {where}, allowNull);
+        }
+
+        protected async Task<TU> FindOneAsync<TU>(IEnumerable<ScanCondition> where, bool allowNull = true)
+        {
             using (var context = new DynamoDBContext(client))
             {
-                var search = context.ScanAsync<TU>(new[] {where}, CreateOperationConfig());
+                var search = context.ScanAsync<TU>(where, CreateOperationConfig());
 
                 while (!search.IsDone)
                 {

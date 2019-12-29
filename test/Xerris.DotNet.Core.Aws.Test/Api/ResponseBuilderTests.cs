@@ -1,5 +1,6 @@
 using System.Net;
 using Xerris.DotNet.Core.Aws.Api;
+using Xerris.DotNet.Core.Aws.Test.Model;
 using Xerris.DotNet.Core.Extensions;
 using Xerris.DotNet.Core.Validations;
 using Xunit;
