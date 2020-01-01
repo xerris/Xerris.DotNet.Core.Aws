@@ -20,7 +20,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Repository
         [Fact]
         public void Equal()
         {
-            var eq = this.Equals<Foo>(x => x.FirstName, angelina.FirstName);
+            var eq = angelina.Equals(x => x.FirstName, angelina);
             Validate.Begin()
                 .ComparesTo<ScanCondition>(eq, new ScanCondition(nameof(Foo.FirstName), ScanOperator.Equal,angelina.FirstName), AssertEquals)
                 .Check();
@@ -29,16 +29,21 @@ namespace Xerris.DotNet.Core.Aws.Test.Repository
         [Fact]
         public void NotEqual()
         {
-            var eq = this.NotEqual<Foo>(x => x.LastName, angelina.LastName);
+            var ne = angelina.NotEqual(x => x.LastName, angelina);
             Validate.Begin()
-                .ComparesTo<ScanCondition>(eq, new ScanCondition(nameof(Foo.LastName), ScanOperator.NotEqual, angelina.LastName), AssertEquals)
+                .ComparesTo<ScanCondition>(ne, new ScanCondition(nameof(Foo.LastName), ScanOperator.NotEqual, angelina.LastName), AssertEquals)
+                .Check();
+            
+            ne = angelina.NotEqual<Foo>(x => x.LastName, angelina.LastName);
+            Validate.Begin()
+                .ComparesTo<ScanCondition>(ne, new ScanCondition(nameof(Foo.LastName), ScanOperator.NotEqual, angelina.LastName), AssertEquals)
                 .Check();
         }
         
         [Fact]
         public void Contains()
         {
-            var eq = this.Contains<Foo>(x => x.LastName, angelina.LastName);
+            var eq = angelina.Contains(x => x.LastName, angelina);
             Validate.Begin()
                 .ComparesTo<ScanCondition>(eq, new ScanCondition(nameof(Foo.LastName), ScanOperator.Contains, angelina.LastName), AssertEquals)
                 .Check();
@@ -47,7 +52,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Repository
         [Fact]
         public void NotContains()
         {
-            var eq = this.NotContains<Foo>(x => x.LastName, angelina.LastName);
+            var eq = angelina.NotContains(x => x.LastName, angelina);
             Validate.Begin()
                 .ComparesTo<ScanCondition>(eq, new ScanCondition(nameof(Foo.LastName), ScanOperator.NotContains, angelina.LastName), AssertEquals)
                 .Check();
@@ -56,7 +61,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Repository
         [Fact]
         public void GreaterThan()
         {
-            var eq = this.GreaterThan<Foo>(x => x.Age, angelina.Age);
+            var eq = this.GreaterThan(x => x.Age, angelina);
             Validate.Begin()
                 .ComparesTo<ScanCondition>(eq, new ScanCondition(nameof(Foo.Age), ScanOperator.GreaterThan, angelina.Age), AssertEquals)
                 .Check();
@@ -65,7 +70,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Repository
         [Fact]
         public void GreaterThanOrEqual()
         {
-            var eq = this.GreaterThanOrEqual<Foo>(x => x.Age, angelina.Age);
+            var eq = this.GreaterThanOrEqual(x => x.Age, angelina);
             Validate.Begin()
                 .ComparesTo<ScanCondition>(eq, new ScanCondition(nameof(Foo.Age), ScanOperator.GreaterThanOrEqual, angelina.Age), AssertEquals)
                 .Check();
@@ -74,7 +79,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Repository
         [Fact]
         public void LessThan()
         {
-            var eq = this.LessThan<Foo>(x => x.Age, angelina.Age);
+            var eq = this.LessThan(x => x.Age, angelina);
             Validate.Begin()
                 .ComparesTo<ScanCondition>(eq, new ScanCondition(nameof(Foo.Age), ScanOperator.LessThan, angelina.Age), AssertEquals)
                 .Check();
@@ -83,7 +88,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Repository
         [Fact]
         public void LessThanOrEqual()
         {
-            var eq = this.LessThanOrEqual<Foo>(x => x.Age, angelina.Age);
+            var eq = this.LessThanOrEqual(x => x.Age, angelina);
             Validate.Begin()
                 .ComparesTo<ScanCondition>(eq, new ScanCondition(nameof(Foo.Age), ScanOperator.LessThanOrEqual, angelina.Age), AssertEquals)
                 .Check();
@@ -92,8 +97,8 @@ namespace Xerris.DotNet.Core.Aws.Test.Repository
         [Fact]
         public void MultipleScanConditions()
         {
-            var condition = this.Equals<Foo>(x => x.FirstName, angelina.FirstName)
-                .And(this.GreaterThan<Foo>(x => x.Age, angelina.Age))
+            var condition = this.Equals(x => x.FirstName, angelina)
+                .And(this.GreaterThan(x => x.Age, angelina))
                 .And(this.NotEqual<Foo>(x => x.LastName, "Pitt")).ToList();
 
             Validate.Begin()
