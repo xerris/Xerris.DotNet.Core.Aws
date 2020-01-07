@@ -1,0 +1,30 @@
+{
+  "name": "calgarylibrary",
+  "version": "0.1.0",
+  "bin": {
+    "nutrien.dxp.usermanagement.infrastructure": "bin/infrastructure.js"
+  },
+  "scripts": {
+    "clean": "rimraf bin",
+    "build": "npm run clean && tsc",
+    "watch": "tsc -w",
+    "test": "npm run build && jest",
+    "cdk": "npm run build && cdk"
+  },
+  "devDependencies": {
+    "@aws-cdk/assert": "^1.14.0",
+    "@types/jest": "^24.0.19",
+    "@types/node": "^12.11.2",
+    "aws-cdk": "^1.14.0",
+    "rimraf": "^3.0.0",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigateway": "^1.14.0",
+    "@aws-cdk/aws-iam": "^1.14.0",
+    "@aws-cdk/aws-lambda": "^1.14.0",
+    "@aws-cdk/core": "^1.14.0"
+  }
+}

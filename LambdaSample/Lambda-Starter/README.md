@@ -1,0 +1,2 @@
+# easy lambda
+`gulp package`

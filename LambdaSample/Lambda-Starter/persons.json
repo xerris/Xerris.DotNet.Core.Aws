@@ -1,0 +1,22 @@
+[{
+  "id": 1,
+  "first_name": "Evelyn",
+  "last_name": "Pirouet",
+  "email": "epirouet0@disqus.com",
+  "gender": "Female",
+  "ip_address": "188.250.189.227"
+}, {
+  "id": 2,
+  "first_name": "Monti",
+  "last_name": "Erasmus",
+  "email": "merasmus1@deviantart.com",
+  "gender": "Male",
+  "ip_address": "72.253.113.167"
+}, {
+  "id": 3,
+  "first_name": "Tore",
+  "last_name": "Hug",
+  "email": "thug2@dailymail.co.uk",
+  "gender": "Male",
+  "ip_address": "124.111.58.65"
+}]
