@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "deploy": "src/Infrastructure "
   },
   "name": "xerris.dotnet.core.aws",
   "version": "1.0.0",

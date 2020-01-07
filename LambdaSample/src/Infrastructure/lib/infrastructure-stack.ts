@@ -13,8 +13,7 @@ export class InfrastructureStack extends cdk.Stack {
       this.zipFileLocation = path.join(__dirname, '../../../dist/LambdaPackage.zip'); 
 
       const getBooks = this.createLambda('getBooks', 
-          'Xerris.Lambda.Api::Xerris.Lambda.Api.BookHandler::GetBooks');
-      
+          'Xerris.Lambda.Api::Xerris.Lambda.Api.Handlers.BookHandler::GetBooks');
       
       const api = new apigateway.RestApi(this, 'xerris-api-sample', {
           restApiName: 'xerris-api-sample',

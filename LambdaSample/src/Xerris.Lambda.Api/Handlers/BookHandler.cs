@@ -28,7 +28,7 @@ namespace Xerris.Lambda.Api.Handlers
                     Pages = 150
                 }
             };
-            return books.ToJson().Ok();
+            return books.Ok();
         }
     }
 }
