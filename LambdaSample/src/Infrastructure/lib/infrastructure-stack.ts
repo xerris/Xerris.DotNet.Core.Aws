@@ -16,19 +16,19 @@ export class InfrastructureStack extends cdk.Stack {
           'Xerris.Lambda.Api::Xerris.Lambda.Api.BookHandler::GetBooks');
       
       
-      const api = new apigateway.RestApi(this, 'burnco-ecom', {
-          restApiName: 'burnco-ecom-api',
+      const api = new apigateway.RestApi(this, 'xerris-api-sample', {
+          restApiName: 'xerris-api-sample',
           deployOptions: {
               stageName: 'dev'
           }
       });
 
-      const shopifyResource = api.root.addResource('shopify-hook');
+      const libraryResource = api.root.addResource('library');
 
       const postIntegration = new apigateway.LambdaIntegration(getBooks);
 
-      shopifyResource.addMethod('POST', postIntegration);
-      addCorsOptions(shopifyResource);
+      libraryResource.addMethod('GET', postIntegration);
+      addCorsOptions(libraryResource);
   }
 
     private createLambda(id : string, handler: string) {
