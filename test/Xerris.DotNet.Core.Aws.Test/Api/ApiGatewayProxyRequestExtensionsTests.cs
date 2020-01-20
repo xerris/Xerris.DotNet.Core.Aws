@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Amazon.Lambda.APIGatewayEvents;
 using FluentAssertions;
 using Xerris.DotNet.Core.Aws.Api;
@@ -72,6 +73,22 @@ namespace Xerris.DotNet.Core.Aws.Test.Api
         {
             var request = new APIGatewayProxyRequest {QueryStringParameters = null};
             request.GetQueryString("kaka").Should().BeNull();
+        }
+
+        [Fact]
+        public void GetPathParameter()
+        {
+            var pathParameters = new Dictionary<string, string> {{"key", "value"}};
+            var request = new APIGatewayProxyRequest {PathParameters = pathParameters};
+            request.GetPathParameter("key").Should().Be("value");
+        }
+
+        [Fact]
+        public void GetPathParameter_WrongKey()
+        {
+            var pathParameters = new Dictionary<string, string> {{"key", "value"}};
+            var request = new APIGatewayProxyRequest {PathParameters = pathParameters};
+            request.GetPathParameter("kaka").Should().BeNull();
         }
     }
 }

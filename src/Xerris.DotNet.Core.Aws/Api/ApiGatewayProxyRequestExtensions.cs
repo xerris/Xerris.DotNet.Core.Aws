@@ -30,6 +30,14 @@ namespace Xerris.DotNet.Core.Aws.Api
             request.QueryStringParameters.TryGetValue(key, out var value);
             return value;
         }
+
+        public static string GetPathParameter(this APIGatewayProxyRequest request, string key)
+        {
+            if (request.PathParameters.IsNullOrEmpty()) return null;
+            Validate.Begin().IsNotEmpty(key, "path parameter").Check();
+            request.PathParameters.TryGetValue(key, out var value);
+            return value;
+        }
                 
         public static string GetAuthorization(this APIGatewayProxyRequest request)
         {
