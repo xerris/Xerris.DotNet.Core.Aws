@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Amazon.Lambda.APIGatewayEvents;
 using FluentAssertions;
 using Xerris.DotNet.Core.Aws.Api;
@@ -23,7 +22,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Api
         [Fact]
         public void Parse_NotAFoo()
         {
-            var foo = "hi, I'm not a foo";
+            const string foo = "hi, I'm not a foo";
             var request = new APIGatewayProxyRequest {Body = foo };
 
             request.Parse<Foo>().Should().BeEquivalentTo(new Foo());
@@ -35,6 +34,29 @@ namespace Xerris.DotNet.Core.Aws.Test.Api
             var headers = new Dictionary<string, string> {{ApiGatewayProxyRequestExtensions.Authorization, "auth"}};
             var request = new APIGatewayProxyRequest {Headers = headers};
             request.GetAuthorization().Should().Be("auth");
+        }
+        
+        [Fact]
+        public void GetHeader()
+        {
+            var headers = new Dictionary<string, string> {{"com.xerris.header", "Hi there"}};
+            var request = new APIGatewayProxyRequest {Headers = headers};
+            request.GetHeader("com.xerris.header").Should().Be("Hi there");
+        }
+        
+        [Fact]
+        public void GetHeader_KeyNotFound()
+        {
+            var headers = new Dictionary<string, string> {{"Hi there", "com.xerris.header"}};
+            var request = new APIGatewayProxyRequest {Headers = headers};
+            request.GetHeader("kaka").Should().BeNull();
+        }
+        
+        [Fact]
+        public void GetHeader_NoHeaders()
+        {
+            var request = new APIGatewayProxyRequest {Headers = null};
+            request.GetHeader("kaka").Should().BeNull();
         }
         
         [Fact]

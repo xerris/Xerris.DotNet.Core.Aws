@@ -41,8 +41,13 @@ namespace Xerris.DotNet.Core.Aws.Api
                 
         public static string GetAuthorization(this APIGatewayProxyRequest request)
         {
+            return GetHeader(request, Authorization);
+        }
+                
+        public static string GetHeader(this APIGatewayProxyRequest request, string key)
+        {
             if (request.Headers == null) return null; 
-            request.Headers.TryGetValue(Authorization, out var value);
+            request.Headers.TryGetValue(key, out var value);
             return value;
         }
     }
