@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using Amazon.Lambda.APIGatewayEvents;
@@ -24,7 +25,6 @@ namespace Xerris.DotNet.Core.Aws.Api
                 Body = payload,
                 Headers = Headers
             };
-            
         }
 
         public static APIGatewayProxyResponse Ok(this string payload)
@@ -72,9 +72,15 @@ namespace Xerris.DotNet.Core.Aws.Api
             return CreateResponse(payload, HttpStatusCode.BadRequest);
         }
 
-        public static APIGatewayProxyResponse UnAuthorized(this object payload)
+        public static APIGatewayProxyResponse UnAuthorized(this object called)
         {
             return CreateResponse(null, HttpStatusCode.Unauthorized);
+        }
+
+        public static APIGatewayProxyResponse Warmed(this object called)
+        {
+            var payload = new { warmedAt = DateTime.UtcNow.ToString("s")};
+            return Ok(payload);
         }
     }
 }

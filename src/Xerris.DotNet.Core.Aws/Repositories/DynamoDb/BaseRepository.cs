@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Xerris.DotNet.Core.Extensions;
 using DynamoTable=Amazon.DynamoDBv2.DocumentModel;
 
@@ -17,9 +19,15 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
     
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
+        private static readonly JsonSerializerSettings DynamoDbJsonSerializationSettings =
+                          new JsonSerializerSettings
+                          {
+                              ContractResolver = new DefaultContractResolver()
+                          };
+        
         private readonly IAmazonDynamoDB client;
-
         private ITable Table { get; }
+        
         
         protected BaseRepository(IAmazonDynamoDB client, string tableName) : this(client, TableProxy.Create(client, tableName))
         {
@@ -54,13 +62,13 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
 
         public async Task SaveAsync(T toUpdate)
         {
-            var item = Document.FromJson(toUpdate.ToJson(JsonExtensions.DefaultCaseSettings));
+            var item = Document.FromJson(toUpdate.ToJson(DynamoDbJsonSerializationSettings));
             await Table.PutItemAsync(item);
         }
 
         public async Task DeleteAsync(T toDelete)
         {
-            await Table.DeleteItemAsync(Document.FromJson(toDelete.ToJson(JsonExtensions.DefaultCaseSettings)));
+            await Table.DeleteItemAsync(Document.FromJson(toDelete.ToJson(DynamoDbJsonSerializationSettings)));
         }
 
         private DynamoDBOperationConfig CreateOperationConfig()
