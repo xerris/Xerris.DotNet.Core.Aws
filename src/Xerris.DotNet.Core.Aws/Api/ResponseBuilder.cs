@@ -16,83 +16,65 @@ namespace Xerris.DotNet.Core.Aws.Api
             {"Content-type", "application/json; charset=UTF-8"}
         };
 
-        public static APIGatewayProxyResponse Ok(this string payload)
+        public static APIGatewayProxyResponse CreateResponse(this string payload, HttpStatusCode statusCode)
         {
             return new APIGatewayProxyResponse
             {
-                StatusCode = (int) HttpStatusCode.OK,
+                StatusCode = (int)statusCode,
                 Body = payload,
                 Headers = Headers
             };
+            
+        }
+
+        public static APIGatewayProxyResponse Ok(this string payload)
+        {
+            return CreateResponse(payload, HttpStatusCode.OK);
         }
 
         public static APIGatewayProxyResponse Ok<T>(this T payload)
         {
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int) HttpStatusCode.OK,
-                Body = payload.ToJson(),
-                Headers = Headers
-            };
+            return CreateResponse(payload.ToJson(), HttpStatusCode.OK);
         }
 
         public static APIGatewayProxyResponse Created<T>(this T payload)
         {
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int) HttpStatusCode.Created,
-                Body = payload.ToJson(),
-                Headers = Headers
-            };
+            return CreateResponse(payload.ToJson(), HttpStatusCode.Created);
         }
 
         public static APIGatewayProxyResponse Accepted<T>(this T payload)
         {
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int) HttpStatusCode.Accepted,
-                Body = payload.ToJson(),
-                Headers = Headers
-            };
+            return CreateResponse(payload.ToJson(), HttpStatusCode.Accepted);
         }
         
         public static APIGatewayProxyResponse Error(this string payload)
         {
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int) HttpStatusCode.InternalServerError,
-                Body = payload,
-                Headers = Headers
-            };
+            return CreateResponse(payload, HttpStatusCode.InternalServerError);
         }
 
-        public static APIGatewayProxyResponse BadRequest(this string payload)
+        public static APIGatewayProxyResponse NotFound(this string payload)
         {
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int) HttpStatusCode.BadRequest,
-                Body = payload,
-                Headers = Headers
-            };
+            return CreateResponse(payload, HttpStatusCode.NotFound);
+        }
+
+        public static APIGatewayProxyResponse NotFound<T>(this T payload)
+        {
+            return CreateResponse(payload.ToJson(), HttpStatusCode.NotFound);
         }
 
         public static APIGatewayProxyResponse BadRequest<T>(this T payload)
         {
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int) HttpStatusCode.BadRequest,
-                Body = payload.ToJson(),
-                Headers = Headers
-            };
+            return CreateResponse(payload.ToJson(), HttpStatusCode.BadRequest);
         }
 
-        public static APIGatewayProxyResponse UnAuthorized(this object item)
+        public static APIGatewayProxyResponse BadRequest(this string payload)
         {
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int) HttpStatusCode.Unauthorized,
-                Headers = Headers
-            };
+            return CreateResponse(payload, HttpStatusCode.BadRequest);
+        }
+
+        public static APIGatewayProxyResponse UnAuthorized(this object payload)
+        {
+            return CreateResponse(null, HttpStatusCode.Unauthorized);
         }
     }
 }
