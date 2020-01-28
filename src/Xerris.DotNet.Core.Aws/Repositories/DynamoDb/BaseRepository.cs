@@ -15,6 +15,8 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
     {
         Task SaveAsync(T toUpdate);
         Task DeleteAsync(T toDelete);
+        Task<IEnumerable<TU>> FindAllAsync<TU>(IEnumerable<ScanCondition> where);
+        Task<TU> FindOneAsync<TU>(ScanCondition where, bool allowNull = true);
     }
     
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
@@ -38,8 +40,8 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
             this.client = client;
             Table = table;
         }
-
-        protected async Task<TU> FindOneAsync<TU>(ScanCondition where, bool allowNull = true)
+        
+        public async Task<TU> FindOneAsync<TU>(ScanCondition where, bool allowNull = true)
         {
             return await FindOneAsync<TU>(new[] {where}, allowNull);
         }
@@ -58,6 +60,22 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
                 if (allowNull) return default;
             }
             throw new NotFoundException<T>(where);
+        }
+
+        public async Task<IEnumerable<TU>> FindAllAsync<TU>(IEnumerable<ScanCondition> where)
+        {
+            using var context = new DynamoDBContext(client);
+            var search = context.ScanAsync<TU>(@where, CreateOperationConfig());
+            var results = new List<TU>();
+
+            while (!search.IsDone)
+            {
+                var entities = await search.GetNextSetAsync();
+                if (entities.Any())
+                    results.AddRange(entities);
+            }
+
+            return results;
         }
 
         public async Task SaveAsync(T toUpdate)
