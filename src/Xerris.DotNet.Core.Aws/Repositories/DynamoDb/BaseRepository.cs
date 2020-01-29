@@ -65,8 +65,8 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
         public async Task<IEnumerable<TU>> FindAllAsync<TU>(IEnumerable<ScanCondition> where)
         {
             using var context = new DynamoDBContext(client);
-            var search = context.ScanAsync<TU>(@where, CreateOperationConfig());
             var results = new List<TU>();
+            var search = context.ScanAsync<TU>(where, CreateOperationConfig());
 
             while (!search.IsDone)
             {
