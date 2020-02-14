@@ -16,7 +16,7 @@
         <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.101.87" />
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.100.1" />
         <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.101.68" />
-        <PackageReference Include="Xerris.DotNet.Core" Version="0.0.25" />
+        <PackageReference Include="Xerris.DotNet.Core" Version="0.0.34" />
     </ItemGroup>
 
 </Project>

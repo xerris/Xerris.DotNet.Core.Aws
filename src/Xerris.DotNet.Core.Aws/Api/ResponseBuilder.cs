@@ -17,7 +17,7 @@ namespace Xerris.DotNet.Core.Aws.Api
             {"Content-type", "application/json; charset=UTF-8"}
         };
 
-        public static APIGatewayProxyResponse CreateResponse(this string payload, HttpStatusCode statusCode)
+        private static APIGatewayProxyResponse CreateResponse(this string payload, HttpStatusCode statusCode)
         {
             return new APIGatewayProxyResponse
             {
