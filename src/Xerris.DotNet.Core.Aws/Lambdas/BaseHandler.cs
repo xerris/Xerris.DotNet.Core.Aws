@@ -37,6 +37,25 @@ namespace Xerris.DotNet.Core.Aws.Lambdas
             }
         }
         
+        protected static async Task<APIGatewayProxyResponse> SendAsync<T>(Func<Task<T>> action, [CallerMemberName]string path=null)
+        {
+            try
+            {
+                var response = await action();
+                return response.Ok();
+            }
+            catch (ValidationException e)
+            {
+                Log.Error(e, $"Validation error in {path}");
+                return e.Message.BadRequest();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, $"Unexpected error encountered {path}");
+                return e.Message.Error();
+            }
+        }
+        
         protected static string GetIdentity(APIGatewayProxyRequest request)
         {
             Log.Debug("Checking Identity...");
