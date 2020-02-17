@@ -56,6 +56,50 @@ namespace Xerris.DotNet.Core.Aws.Lambdas
             }
         }
         
+        protected static async Task<APIGatewayProxyResponse> SendAsync(Func<Task<APIGatewayProxyResponse>> action, [CallerMemberName]string path=null)
+        {
+            try
+            {
+                return await action();
+            }
+            catch (ValidationException e)
+            {
+                Log.Error(e, $"Validation error in {path}");
+                return e.Message.BadRequest();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, $"Unexpected error encountered {path}");
+                return e.Message.Error();
+            }
+        }
+        
+        protected static async Task<APIGatewayProxyResponse> SendAsync<TEx>(Func<Task<APIGatewayProxyResponse>> action, [CallerMemberName]string path=null, Action<TEx> customExceptionHandler=null)
+          where TEx : Exception 
+        {
+            try
+            {
+                return await action();
+            }
+            catch (ValidationException e)
+            {
+                Log.Error(e, $"Validation error in {path}");
+                return e.Message.Error();
+            }
+            catch (TEx ex)
+            {
+                Log.Error(ex, $"Validation error in {path}");
+                customExceptionHandler?.Invoke(ex);
+                return ex.Message.BadRequest();
+                
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, $"Unexpected error encountered {path}");
+                return e.Message.Error();
+            }
+        }
+        
         protected static string GetIdentity(APIGatewayProxyRequest request)
         {
             Log.Debug("Checking Identity...");
@@ -64,6 +108,18 @@ namespace Xerris.DotNet.Core.Aws.Lambdas
                 .IsNotNull(identity, "identity is null. Ensure the Authorization header is set.").Check()
                 .IsNotEmpty(identity, "identity is null").Check();
             return identity;
+        }
+
+        protected bool IsKeepWarm(APIGatewayProxyRequest input)
+        {
+            try
+            {
+                return input.Headers.TryGetValue("x-keep-warm", out var value) && bool.Parse(value);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
