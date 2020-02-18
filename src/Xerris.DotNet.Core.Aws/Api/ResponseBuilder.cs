@@ -12,7 +12,7 @@ namespace Xerris.DotNet.Core.Aws.Api
         {
             {"Access-Control-Allow-Origin", "*"},
             {"Access-Control-Allow-Credentials", "true"},
-            {"Access-Control-Allow-Headers", "Content-Type,X-Api-Key"},
+            {"Access-Control-Allow-Headers", "Content-Type,X-Api-Key,Authorization,X-Api-Key,X-Amz-Security-Token"},
             {"Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD"},
             {"Content-type", "application/json; charset=UTF-8"}
         };
