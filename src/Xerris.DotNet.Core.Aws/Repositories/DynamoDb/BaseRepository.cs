@@ -83,6 +83,11 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
             return await FindAllAsync<TU>(new[] {where});
         }
 
+        public async Task<IEnumerable<TU>> FindAllAsync<TU>()
+        {
+            return await FindAllAsync<TU>(Enumerable.Empty<ScanCondition>());
+        }
+
         public async Task SaveAsync(T toUpdate)
         {
             var item = Document.FromJson(toUpdate.ToJson(DynamoDbJsonSerializationSettings));

@@ -6,16 +6,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="1.2.0" />
+        <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="1.3.0" />
         <PackageReference Include="Amazon.Lambda.Core" Version="1.1.0" />
-        <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.6.0" />
-        <PackageReference Include="AWS.Logger.Core" Version="1.4.0" />
+        <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.7.0" />
+        <PackageReference Include="AWS.Logger.Core" Version="1.5.1" />
         <PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="1.0.3" />
-        <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.3.103.17" />
-        <PackageReference Include="AWSSDK.Core" Version="3.3.104.11" />
-        <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.101.87" />
+        <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.3.108.5" />
+        <PackageReference Include="AWSSDK.Core" Version="3.3.104.29" />
+        <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.105.3" />
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.100.1" />
-        <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.101.68" />
+        <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.102.1" />
         <PackageReference Include="Xerris.DotNet.Core" Version="0.0.34" />
     </ItemGroup>
 
