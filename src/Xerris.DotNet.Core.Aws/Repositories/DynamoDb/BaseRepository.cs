@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
         Task SaveAsync(T toUpdate);
         Task DeleteAsync(T toDelete);
         Task<IEnumerable<TU>> FindAllAsync<TU>(IEnumerable<ScanCondition> where);
+        Task<IEnumerable<TU>> FindAllAsync<TU>();
         Task<TU> FindOneAsync<TU>(ScanCondition where, bool allowNull = true);
     }
     
