@@ -1,34 +1,41 @@
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
+using Xerris.DotNet.Core.Aws.IoC;
 
 namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
 {
     public class TableProxy : ITable
     {
-        private readonly Table table;
+        private readonly ILazyProvider<IAmazonDynamoDB> client;
+        private Table table;
 
-        private TableProxy(Table table)
+        private TableProxy(ILazyProvider<IAmazonDynamoDB> client, string tableName)
         {
-            this.table = table;
-            TableName = table.TableName;
+            this.client = client;
+            this.TableName = tableName;
+        }
+
+        private Table Table
+        {
+            get { return table ??= Table.LoadTable(client.Create(), TableName); }
         }
 
         public async Task PutItemAsync(Document toAdd)
         {
-            await table.PutItemAsync(toAdd);
+            await Table.PutItemAsync(toAdd);
         }
 
         public async Task DeleteItemAsync(Document toDelete)
         {
-            await table.DeleteItemAsync(toDelete);
+            await Table.DeleteItemAsync(toDelete);
         }
 
-        public string TableName { get; set; }
+        public string TableName { get; }
 
-        public static ITable Create(IAmazonDynamoDB client, string tableName)
+        public static ITable Create(ILazyProvider<IAmazonDynamoDB> client, string tableName)
         {
-            return new TableProxy(Table.LoadTable(client, tableName));
+            return new TableProxy(client, tableName);
         }
     }
 }

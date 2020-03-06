@@ -7,6 +7,6 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
     {
         Task PutItemAsync(Document toAdd);
         Task DeleteItemAsync(Document fromJson);
-        string TableName { get; set; }
+        string TableName { get; }
     }
 }

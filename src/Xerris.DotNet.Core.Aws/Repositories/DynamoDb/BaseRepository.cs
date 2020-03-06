@@ -6,6 +6,7 @@ using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Xerris.DotNet.Core.Aws.IoC;
 using Xerris.DotNet.Core.Extensions;
 using DynamoTable=Amazon.DynamoDBv2.DocumentModel;
 
@@ -28,20 +29,25 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
                               ContractResolver = new DefaultContractResolver()
                           };
         
-        private readonly IAmazonDynamoDB client;
         private ITable Table { get; }
+        private readonly ILazyProvider<IAmazonDynamoDB> clientProvider;
         
+        protected BaseRepository(ILazyProvider<IAmazonDynamoDB> clientProvider, string tableName)
+        {
+            this.clientProvider = clientProvider;
+            Table = TableProxy.Create(clientProvider, tableName);
+        }
         
-        protected BaseRepository(IAmazonDynamoDB client, string tableName) : this(client, TableProxy.Create(client, tableName))
+        protected BaseRepository(IAmazonDynamoDB client, string tableName) : this(new LazyProvider<IAmazonDynamoDB>(() => client), tableName)
         {
         }
 
         protected BaseRepository(IAmazonDynamoDB client, ITable table)
         {
-            this.client = client;
+            clientProvider = new LazyProvider<IAmazonDynamoDB>(() => client);
             Table = table;
         }
-        
+
         public async Task<TU> FindOneAsync<TU>(ScanCondition where, bool allowNull = true)
         {
             return await FindOneAsync<TU>(new[] {where}, allowNull);
@@ -49,7 +55,7 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
 
         protected async Task<TU> FindOneAsync<TU>(IEnumerable<ScanCondition> where, bool allowNull = true)
         {
-            using (var context = new DynamoDBContext(client))
+            using (var context = new DynamoDBContext(clientProvider.Create()))
             {
                 var search = context.ScanAsync<TU>(where, CreateOperationConfig());
 
@@ -65,7 +71,7 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
 
         public async Task<IEnumerable<TU>> FindAllAsync<TU>(IEnumerable<ScanCondition> where)
         {
-            using var context = new DynamoDBContext(client);
+            using var context = new DynamoDBContext(clientProvider.Create());
             var results = new List<TU>();
             var search = context.ScanAsync<TU>(where, CreateOperationConfig());
 
