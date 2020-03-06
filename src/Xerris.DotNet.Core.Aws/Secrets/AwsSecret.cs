@@ -14,14 +14,11 @@ namespace Xerris.DotNet.Core.Aws.Secrets
         private readonly RegionEndpoint region;
         private readonly IAmazonSecretsManager client;
 
-        public AwsSecret(string secretId, string region) 
-                : this(secretId, region, new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(region)))
+        public AwsSecret(string secretId, string region)
         {
-        }
-
-        public AwsSecret(string secretId, string region, IAmazonSecretsManager client)
-                : this(secretId, RegionEndpoint.GetBySystemName(region), client)
-        {
+            this.secretId = secretId;
+            this.region = RegionEndpoint.GetBySystemName(region);
+            client = new AmazonSecretsManagerClient(this.region);
         }
 
         public AwsSecret(string secretId, RegionEndpoint region, IAmazonSecretsManager client)
