@@ -27,10 +27,9 @@ namespace Xerris.DotNet.Core.Aws.IoC
             AWSOptions awsOptions)
         {
             var chain = new CredentialProfileStoreChain();
-            if (chain.TryGetAWSCredentials(awsOptions.Profile, out var awsCredentials))
-            {
+            if (!chain.TryGetAWSCredentials(awsOptions.Profile, out var awsCredentials))
                 throw new Exception("Error establishing your AWS Credentials");
-            }
+            
             awsOptions.Credentials = awsCredentials;
             return AddSecretProvider(collection, secretConfigCollection, awsCredentials);
         }
