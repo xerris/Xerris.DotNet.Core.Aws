@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Amazon.Runtime;
 
 namespace Xerris.DotNet.Core.Aws.Secrets
 {
@@ -8,10 +9,12 @@ namespace Xerris.DotNet.Core.Aws.Secrets
         private readonly Dictionary<string, ISecret> cache = new Dictionary<string, ISecret>();
 
         private readonly SecretConfigCollection collection;
+        private readonly AWSCredentials credentials;
 
-        public SecretProvider(SecretConfigCollection collection)
+        public SecretProvider(SecretConfigCollection collection, AWSCredentials credentials)
         {
             this.collection = collection;
+            this.credentials = credentials;
         }
         
         public ISecret GetAwsSecret(string name)
@@ -20,7 +23,7 @@ namespace Xerris.DotNet.Core.Aws.Secrets
             lock (cache)
             {
                 if (cache.TryGetValue(name, out var secret)) return secret;
-                secret = new CachingSecret(new AwsSecret(config.SecretId, config.Region));
+                secret = new CachingSecret(new AwsSecret(config.SecretId, config.Region, credentials));
                 cache[name] = secret;
 
                 return secret;

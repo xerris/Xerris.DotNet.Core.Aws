@@ -3,6 +3,8 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Amazon;
+using Amazon.Lambda.Core;
+using Amazon.Runtime;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
 
@@ -14,11 +16,11 @@ namespace Xerris.DotNet.Core.Aws.Secrets
         private readonly RegionEndpoint region;
         private readonly IAmazonSecretsManager client;
 
-        public AwsSecret(string secretId, string region)
+        public AwsSecret(string secretId, string region, AWSCredentials credentials)
         {
             this.secretId = secretId;
             this.region = RegionEndpoint.GetBySystemName(region);
-            client = new AmazonSecretsManagerClient(this.region);
+            client = new AmazonSecretsManagerClient(credentials, this.region);
         }
 
         public AwsSecret(string secretId, RegionEndpoint region, IAmazonSecretsManager client)
