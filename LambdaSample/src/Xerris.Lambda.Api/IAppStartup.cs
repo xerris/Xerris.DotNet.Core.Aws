@@ -15,7 +15,7 @@ namespace Xerris.Lambda.Api
             
             collection.AddSingleton<IApplicationConfig>(appConfig);
             collection.AddDefaultAWSOptions(appConfig.AwsOptions);
-            collection.AddLazySecretProvider(appConfig.SecretConfigurations, appConfig.AwsOptions);
+            collection.AddLazySecretProvider(appConfig.SecretConfigurations);
 
             return builder.Configuration;
         }
