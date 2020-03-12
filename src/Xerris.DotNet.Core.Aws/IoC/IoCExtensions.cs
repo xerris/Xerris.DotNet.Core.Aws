@@ -24,8 +24,7 @@ namespace Xerris.DotNet.Core.Aws.IoC
             return collection;
         }
         
-        public static IServiceCollection AddLazySecretProvider(this IServiceCollection collection, SecretConfigCollection secretConfigCollection,
-            AWSOptions awsOptions)
+        public static IServiceCollection AddLazySecretProvider(this IServiceCollection collection, SecretConfigCollection secretConfigCollection)
         {
             collection.AddAWSService<IAmazonSecretsManager>();
             collection.AddSingleton<ILazyProvider<ISecretProvider>>(provider =>
