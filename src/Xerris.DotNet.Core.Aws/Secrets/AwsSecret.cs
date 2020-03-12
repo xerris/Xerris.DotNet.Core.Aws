@@ -3,8 +3,6 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Amazon;
-using Amazon.Lambda.Core;
-using Amazon.Runtime;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
 
@@ -16,11 +14,8 @@ namespace Xerris.DotNet.Core.Aws.Secrets
         private readonly RegionEndpoint region;
         private readonly IAmazonSecretsManager client;
 
-        public AwsSecret(string secretId, string region, AWSCredentials credentials)
+        public AwsSecret(string secretId, string region, IAmazonSecretsManager manager) : this(secretId, RegionEndpoint.GetBySystemName(region), manager)
         {
-            this.secretId = secretId;
-            this.region = RegionEndpoint.GetBySystemName(region);
-            client = new AmazonSecretsManagerClient(credentials, this.region);
         }
 
         public AwsSecret(string secretId, RegionEndpoint region, IAmazonSecretsManager client)
@@ -44,10 +39,8 @@ namespace Xerris.DotNet.Core.Aws.Secrets
                     return response.SecretString;
                 }
 
-                using (var reader = new StreamReader(response.SecretBinary))
-                {
-                    return Encoding.UTF8.GetString(Convert.FromBase64String(reader.ReadToEnd()));
-                }
+                using var reader = new StreamReader(response.SecretBinary);
+                return Encoding.UTF8.GetString(Convert.FromBase64String(reader.ReadToEnd()));
             }
             catch (Exception e)
             {
