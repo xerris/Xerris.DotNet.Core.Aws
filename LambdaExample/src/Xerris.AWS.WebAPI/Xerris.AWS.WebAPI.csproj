@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+        <LangVersion>8</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.All">
+          <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
+          <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
+        </PackageReference>
+        <PackageReference Include="Serilog" Version="2.9.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="appsettings.json">
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="appsettings.Development.json">
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Xerris.AWS.Services\Xerris.AWS.Services.csproj" />
+    </ItemGroup>
+
+</Project>

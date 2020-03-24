@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <LangVersion>8</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.2" />
+    <PackageReference Include="Microsoft.AspNetCore.All" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="Xerris.DotNet.Core.Aws" Version="0.0.43" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="JunitXml.TestLogger" Version="2.1.15" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="JetBrains.dotCover.DotNetCliTool" Version="2019.2.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xerris.AWS.Hello\Xerris.AWS.Hello.csproj" />
+    <ProjectReference Include="..\Xerris.AWS.Services\Xerris.AWS.Services.csproj" />
+  </ItemGroup>
+</Project>

@@ -26,7 +26,8 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
         private static readonly JsonSerializerSettings DynamoDbJsonSerializationSettings =
                           new JsonSerializerSettings
                           {
-                              ContractResolver = new DefaultContractResolver()
+                              ContractResolver = new DefaultContractResolver(),
+                              NullValueHandling = NullValueHandling.Ignore
                           };
         
         private ITable Table { get; }

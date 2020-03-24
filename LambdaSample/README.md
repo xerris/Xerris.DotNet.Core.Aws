@@ -1,2 +1,0 @@
-# easy lambda
-`gulp package`

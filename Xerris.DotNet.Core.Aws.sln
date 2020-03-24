@@ -4,10 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xerris.DotNet.Core.Aws", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xerris.DotNet.Core.Aws.Test", "test\Xerris.DotNet.Core.Aws.Test\Xerris.DotNet.Core.Aws.Test.csproj", "{4CF1D3FF-BE0A-4AEB-987F-D76BCA0CC4B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xerris.Lambda.Api", "LambdaSample\src\Xerris.Lambda.Api\Xerris.Lambda.Api.csproj", "{B4234ABA-C54E-4318-B1ED-A15F2F21046E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xerris.Lambda.Api.Tests", "LambdaSample\src\Xerris.Lambda.Api.Tests\Xerris.Lambda.Api.Tests.csproj", "{6B9F3453-D029-4907-BE92-B3640F36CD44}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,13 +18,5 @@ Global
 		{4CF1D3FF-BE0A-4AEB-987F-D76BCA0CC4B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CF1D3FF-BE0A-4AEB-987F-D76BCA0CC4B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CF1D3FF-BE0A-4AEB-987F-D76BCA0CC4B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4234ABA-C54E-4318-B1ED-A15F2F21046E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4234ABA-C54E-4318-B1ED-A15F2F21046E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4234ABA-C54E-4318-B1ED-A15F2F21046E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4234ABA-C54E-4318-B1ED-A15F2F21046E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6B9F3453-D029-4907-BE92-B3640F36CD44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B9F3453-D029-4907-BE92-B3640F36CD44}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B9F3453-D029-4907-BE92-B3640F36CD44}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B9F3453-D029-4907-BE92-B3640F36CD44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
