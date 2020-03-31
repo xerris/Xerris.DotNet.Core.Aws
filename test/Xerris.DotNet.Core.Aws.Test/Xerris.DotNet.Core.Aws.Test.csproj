@@ -9,7 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="5.10.2" />
+        <PackageReference Include="Amazon.Lambda.SQSEvents" Version="1.1.0" />
+        <PackageReference Include="AWSSDK.SQS" Version="3.3.102.83" />
+        <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
         <PackageReference Include="Moq" Version="4.13.1" />
         <PackageReference Include="xunit" Version="2.4.1" />
