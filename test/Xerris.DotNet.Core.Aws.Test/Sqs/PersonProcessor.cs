@@ -11,9 +11,9 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
                 : base(sqsClient, deleteSuccessfulMessages)
         {
             ExecuteAsync = action;
+            SqsQueueUrl = "http://test-queue.fifo";
         }
 
         protected override Func<PersonMessage, Task<bool>> ExecuteAsync { get; }
-        protected override string SqsQueueUrl => "http://test-queue.fifo";
     }
 }
