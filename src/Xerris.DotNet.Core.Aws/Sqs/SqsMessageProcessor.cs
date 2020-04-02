@@ -77,9 +77,11 @@ namespace Xerris.DotNet.Core.Aws.Sqs
             };
             var response = await sqsClient.DeleteMessageAsync(deleteRequest);
             if (response.HttpStatusCode == HttpStatusCode.OK)
-                Log.Information("Cannot remove SQS Status: {StatusCode} handle: {ReceiptHandle} ", 
-                    string.Join(response.HttpStatusCode.ToString(), Environment.NewLine), 
-                    string.Join(Environment.NewLine, message.ReceiptHandle));
+                return;
+            
+            Log.Information("Cannot remove SQS Status: {StatusCode} handle: {ReceiptHandle} ", 
+                string.Join(response.HttpStatusCode.ToString(), Environment.NewLine), 
+                string.Join(Environment.NewLine, message.ReceiptHandle));
         }      
     }
 }
