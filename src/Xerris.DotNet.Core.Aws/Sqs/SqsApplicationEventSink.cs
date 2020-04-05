@@ -10,9 +10,9 @@ using Xerris.DotNet.Core.Utilities.ApplicationEvents;
 namespace Xerris.DotNet.Core.Aws.Sqs
 {
 
-    public class ApplicationEventSink : SqsMessageProcessor<ApplicationEvent>, IEventSink
+    public class SqsApplicationEventSink : SqsMessageProcessor<ApplicationEvent>, IEventSink
     {
-        public ApplicationEventSink(string sqsQueueUrl, IAmazonSQS sqsClient) : base(sqsClient, false)
+        public SqsApplicationEventSink(string sqsQueueUrl, IAmazonSQS sqsClient) : base(sqsClient, false)
         {
             SqsQueueUrl = sqsQueueUrl;
         }
