@@ -12,8 +12,9 @@ using DynamoTable=Amazon.DynamoDBv2.DocumentModel;
 
 namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
 {
-    public interface IBaseRepository<in T> where T : class
+    public interface IBaseRepository<T> where T : class
     {
+        Task<T> FindById(object id);
         Task SaveAsync(T toUpdate);
         Task DeleteAsync(T toDelete);
         Task<IEnumerable<TU>> FindAllAsync<TU>(IEnumerable<ScanCondition> where);
@@ -47,6 +48,13 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
         {
             clientProvider = new LazyProvider<IAmazonDynamoDB>(() => client);
             Table = table;
+        }
+
+        public async Task<T> FindById(object id)
+        {
+            using var context = new DynamoDBContext(clientProvider.Create());
+            var result = await context.LoadAsync<T>(id);
+            return result;
         }
 
         public async Task<TU> FindOneAsync<TU>(ScanCondition where, bool allowNull = true)
