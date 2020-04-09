@@ -52,8 +52,8 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
 
         public async Task<T> FindById(object id)
         {
-            using var context = new DynamoDBContext(clientProvider.Create(), CreateOperationConfig());
-            var result = await context.LoadAsync<T>(id);
+            using var context = new DynamoDBContext(clientProvider.Create());
+            var result = await context.LoadAsync<T>(id, CreateOperationConfig());
             return result;
         }
 
