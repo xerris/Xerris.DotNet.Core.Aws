@@ -51,6 +51,11 @@ namespace Xerris.DotNet.Core.Aws.Api
         {
             return CreateResponse(payload, HttpStatusCode.InternalServerError);
         }
+        
+        public static APIGatewayProxyResponse Error<T>(this T payload)
+        {
+            return CreateResponse(payload.ToJson(), HttpStatusCode.InsufficientStorage);
+        }
 
         public static APIGatewayProxyResponse NotFound(this string payload)
         {
