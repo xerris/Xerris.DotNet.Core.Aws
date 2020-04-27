@@ -1,10 +1,9 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Lambda.SQSEvents;
-using Amazon.SQS;
-using Amazon.SQS.Model;
 using Moq;
+using Xerris.DotNet.Core.Aws.Sqs;
+using Xerris.DotNet.Core.Aws.Test.Sqs.Doubles;
 using Xerris.DotNet.Core.Extensions;
 using Xunit;
 
@@ -12,57 +11,49 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
 {
     public class SqsMessageProcessorTest : IDisposable
     {
-        private readonly Mock<IAmazonSQS> sqsClient;
+        private readonly Mock<IConsumeSqsMessages<PersonMessage>> consumer;
+        private readonly Mock<IPublishSqsMessages<PersonMessage>> publisher;
         private readonly MockRepository mocks;
-        
+        private readonly PersonProcessor processor;
+
         public SqsMessageProcessorTest()
         {
             mocks = new MockRepository(MockBehavior.Strict);
-            sqsClient = mocks.Create<IAmazonSQS>();
+            consumer = mocks.Create<IConsumeSqsMessages<PersonMessage>>();
+            publisher = mocks.Create<IPublishSqsMessages<PersonMessage>>();
+
+            processor = new PersonProcessor(consumer.Object, publisher.Object);
         }
 
         [Fact]
-        public void CanProcess_RemovedSqsMessage()
+        public void CanProcessMessage()
         {
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
-            var processor = new PersonProcessor(sqsClient.Object, x =>
-            {
-                x.Done = true;
-                return Task.FromResult(true);
-            });
-
-            sqsClient.Setup(x => x.DeleteMessageAsync(It.IsAny<DeleteMessageRequest>(), new CancellationToken()));
-            
-            var message = new SQSEvent.SQSMessage {Body = elvis.ToJson()}; 
-            var result = processor.Process(new[] {message});
-        }
-
-        [Fact]
-        public async Task CanProcess_DoesNotRemoveSqsMessage()
-        {
-            var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
-            var processor = new PersonProcessor(sqsClient.Object, x =>
-            {
-                x.Done = true;
-                return Task.FromResult(true);
-            }, false);
-            
             var message = new SQSEvent.SQSMessage {Body = elvis.ToJson()};
-            await processor.Process(new[] {message});
-            
-            sqsClient.Verify(x => x.DeleteMessageAsync(It.IsAny<DeleteMessageRequest>(), new CancellationToken()), Times.Never);
+            consumer.Setup(x => x.Process(new[] {message}))
+                .Returns(Task.CompletedTask);
+        
+            processor.Process(new[] {message});
         }
 
         [Fact]
-        public async Task CanProcess_ActionUnsuccesful_DoesNotRemoveSqsMessage()
+        public void CanSendMessage()
         {
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
-            var processor = new PersonProcessor(sqsClient.Object, x => Task.FromResult(false));
-            
-            var message = new SQSEvent.SQSMessage {Body = elvis.ToJson()};
-            await processor.Process(new[] {message});
+            publisher.Setup(x => x.SendMessageAsync(elvis))
+                .ReturnsAsync(true);
+        
+            processor.SendMessageAsync(elvis);
+        }
 
-            sqsClient.Verify(x => x.DeleteMessageAsync(It.IsAny<DeleteMessageRequest>(), new CancellationToken()), Times.Never);
+        [Fact]
+        public void CanSendMessages()
+        {
+            var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
+            publisher.Setup(x => x.SendMessagesAsync(new[] {elvis}))
+                .ReturnsAsync(true);
+        
+            processor.SendMessagesAsync(new[] {elvis});
         }
 
         public void Dispose()

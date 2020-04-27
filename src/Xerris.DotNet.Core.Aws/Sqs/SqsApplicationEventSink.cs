@@ -10,14 +10,12 @@ using Xerris.DotNet.Core.Utilities.ApplicationEvents;
 namespace Xerris.DotNet.Core.Aws.Sqs
 {
 
-    public class SqsApplicationEventSink : SqsMessageProcessor<ApplicationEvent>, IEventSink
+    public class SqsApplicationEventSink : SqsPublisher<ApplicationEvent>, IEventSink
     {
-        public SqsApplicationEventSink(string sqsQueueUrl, IAmazonSQS sqsClient) : base(sqsClient, false)
+        public SqsApplicationEventSink(string sqsQueueUrl, IAmazonSQS sqsClient) : base(sqsClient)
         {
             SqsQueueUrl = sqsQueueUrl;
         }
-
-        protected override Func<ApplicationEvent, Task<bool>> ExecuteAsync => throw new NotSupportedException("ApplicationEventSink does not support reading messages");
 
         public async Task SendAsync(ApplicationEvent applicationEvent)
         {
@@ -42,7 +40,6 @@ namespace Xerris.DotNet.Core.Aws.Sqs
                 Log.Information("Sent ApplicationEventd [{identifier}]", identifiersToBeSent);
                 await SendMessagesAsync(applicationEvents).ConfigureAwait(false);
                 Log.Information("Sent ApplicationEvents [{identifier}]", identifiersToBeSent);
-
             }
             catch (Exception e)
             {
