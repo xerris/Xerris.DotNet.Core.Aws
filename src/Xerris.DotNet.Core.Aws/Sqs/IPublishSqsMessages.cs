@@ -12,8 +12,9 @@ namespace Xerris.DotNet.Core.Aws.Sqs
 {
     public interface IPublishSqsMessages<T> where T : class
     {
-        Task<bool> SendMessageAsync(T message, bool isFifo = false);
+        Task<bool> SendMessageAsync(T message);
         Task<bool> SendMessagesAsync(IEnumerable<T> messages);
+        bool IsFifo { get; set; }
     }
 
     public class SqsPublisher<T> : IPublishSqsMessages<T> where T : class
@@ -21,15 +22,16 @@ namespace Xerris.DotNet.Core.Aws.Sqs
         
         private readonly IAmazonSQS sqsClient;
         protected string SqsQueueUrl { get; set; }
+        public bool IsFifo { get; set; }
 
         public SqsPublisher(IAmazonSQS sqsClient)
         {
             this.sqsClient = sqsClient;
         }
 
-        public async Task<bool> SendMessageAsync(T message, bool isFifo = false)
+        public virtual async Task<bool> SendMessageAsync(T message)
         {
-            var request = new SendMessageRequest(SqsQueueUrl, message.ToJson()).ApplyFifo(isFifo);
+            var request = new SendMessageRequest(SqsQueueUrl, message.ToJson()).ApplyFifo(IsFifo);
             var response = await sqsClient.SendMessageAsync(request).ConfigureAwait(false);
             
             var successful = response.HttpStatusCode == HttpStatusCode.OK;
@@ -41,9 +43,9 @@ namespace Xerris.DotNet.Core.Aws.Sqs
             return successful;
         }
 
-        public async Task<bool> SendMessagesAsync(IEnumerable<T> messages)
+        public virtual async Task<bool> SendMessagesAsync(IEnumerable<T> messages)
         {
-            var batchRequestEntries = messages.Select((m, i) => new SendMessageBatchRequestEntry(i.ToString(), m.ToJson())).ToList();
+            var batchRequestEntries = messages.Select((m, i) => new SendMessageBatchRequestEntry(i.ToString(), m.ToJson()).ApplyFifo(IsFifo)).ToList();
             var request = new SendMessageBatchRequest(SqsQueueUrl, batchRequestEntries);
             var response = await sqsClient.SendMessageBatchAsync(request).ConfigureAwait(false);
             var successful = response.HttpStatusCode == HttpStatusCode.OK;

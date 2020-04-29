@@ -8,6 +8,13 @@ namespace Xerris.DotNet.Core.Aws.Sqs
     {
         private readonly IConsumeSqsMessages<T> consumer;
         private readonly IPublishSqsMessages<T> publisher;
+        private bool isFifo;
+        
+        protected bool IsFifo
+        {
+            get => isFifo;
+            set { isFifo = value; publisher.IsFifo = value; }
+        }
 
         protected SqsMessageProcessor(IConsumeSqsMessages<T> consumer, IPublishSqsMessages<T> publisher)
         {

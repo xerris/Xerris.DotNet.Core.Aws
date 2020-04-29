@@ -15,5 +15,17 @@ namespace Xerris.DotNet.Core.Aws.Sqs
             }
             return request;
         }
+
+        public static SendMessageBatchRequestEntry ApplyFifo(this SendMessageBatchRequestEntry request, bool isFifo)
+        {
+            if (isFifo)
+            {
+                var id = Guid.NewGuid().ToString("D");
+                request.MessageGroupId = id;
+                request.MessageDeduplicationId = id;
+            }
+            return request;
+            
+        }
     }
 }
