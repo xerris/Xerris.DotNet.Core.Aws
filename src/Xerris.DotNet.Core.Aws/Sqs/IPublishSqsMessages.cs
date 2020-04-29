@@ -19,7 +19,7 @@ namespace Xerris.DotNet.Core.Aws.Sqs
     public class SqsPublisher<T> : IPublishSqsMessages<T> where T : class
     {
         private readonly IAmazonSQS sqsClient;
-        protected string SqsQueueUrl { get; set; }
+        private string SqsQueueUrl { get; }
 
         public SqsPublisher(IAmazonSQS sqsClient, string sqsQueueUrl)
         {

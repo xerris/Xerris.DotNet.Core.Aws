@@ -18,16 +18,17 @@ namespace Xerris.DotNet.Core.Aws.Sqs
     public abstract class SqsConsumer<T> : IConsumeSqsMessages<T> where T : class
     {
         private readonly IAmazonSQS sqsClient;
+        private string SqsQueueUrl { get; }
         private readonly bool deleteSuccessfulMessages;
 
-        protected SqsConsumer(IAmazonSQS sqsClient, bool deleteSuccessfulMessages = true)
+        protected SqsConsumer(IAmazonSQS sqsClient, string sqsUrl, bool deleteSuccessfulMessages = false)
         {
             this.sqsClient = sqsClient;
             this.deleteSuccessfulMessages = deleteSuccessfulMessages;
+            SqsQueueUrl = sqsUrl;
         }
 
         protected abstract Func<T, Task<bool>> ExecuteAsync { get; }
-        protected string SqsQueueUrl { get; set; }
 
         public async Task Process(IEnumerable<SQSEvent.SQSMessage> messages)
         {

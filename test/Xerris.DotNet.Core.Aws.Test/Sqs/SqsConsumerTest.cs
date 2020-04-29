@@ -15,6 +15,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
     {
         private readonly Mock<IAmazonSQS> sqsClient;
         private readonly MockRepository mocks;
+        private const string SqsUrl = "myaws.sqs.com";
         
         public SqsConsumerTest()
         {
@@ -26,7 +27,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
         public void CanProcess_RemovedSqsMessage()
         {
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
-            var processor = new PersonConsumer(sqsClient.Object, x =>
+            var processor = new PersonConsumer(sqsClient.Object, SqsUrl, x =>
             {
                 x.Done = true;
                 return Task.FromResult(true);
@@ -35,14 +36,14 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
             sqsClient.Setup(x => x.DeleteMessageAsync(It.IsAny<DeleteMessageRequest>(), new CancellationToken()));
             
             var message = new SQSEvent.SQSMessage {Body = elvis.ToJson()}; 
-            var result = processor.Process(new[] {message});
+            processor.Process(new[] {message});
         }
 
         [Fact]
         public async Task CanProcess_DoesNotRemoveSqsMessage()
         {
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
-            var processor = new PersonConsumer(sqsClient.Object, x =>
+            var processor = new PersonConsumer(sqsClient.Object, SqsUrl, x =>
             {
                 x.Done = true;
                 return Task.FromResult(true);
@@ -58,7 +59,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
         public async Task CanProcess_ActionUnsuccesful_DoesNotRemoveSqsMessage()
         {
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
-            var processor = new PersonConsumer(sqsClient.Object, x => Task.FromResult(false));
+            var processor = new PersonConsumer(sqsClient.Object,SqsUrl, x => Task.FromResult(false));
             
             var message = new SQSEvent.SQSMessage {Body = elvis.ToJson()};
             await processor.Process(new[] {message});

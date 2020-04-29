@@ -4,7 +4,7 @@ using Amazon.Lambda.SQSEvents;
 
 namespace Xerris.DotNet.Core.Aws.Sqs
 {
-    public abstract class SqsMessageProcessor<T> : IProcessSqsMessages<T> where T : class
+    public abstract class SqsMessageProcessor<T> : IConsumeSqsMessages<T> where T : class
     {
         private readonly IConsumeSqsMessages<T> consumer;
         private readonly IPublishSqsMessages<T> publisher;

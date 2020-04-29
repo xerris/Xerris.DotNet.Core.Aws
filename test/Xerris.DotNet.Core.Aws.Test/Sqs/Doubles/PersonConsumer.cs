@@ -7,7 +7,9 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs.Doubles
 {
     public class PersonConsumer : SqsConsumer<PersonMessage>
     {
-        public PersonConsumer(IAmazonSQS sqsClient, Func<PersonMessage, Task<bool>> action, bool deleteSuccessfulMessages = true) : base(sqsClient, deleteSuccessfulMessages)
+        public PersonConsumer(IAmazonSQS sqsClient,string sqsUrl, Func<PersonMessage, Task<bool>> action,
+                              bool deleteSuccessfulMessages = true) : 
+            base(sqsClient, sqsUrl, deleteSuccessfulMessages)
         {
             ExecuteAsync = action;
         }
