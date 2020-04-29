@@ -12,7 +12,7 @@ namespace Xerris.DotNet.Core.Aws.Sqs
 {
     public interface IPublishSqsMessages<T> where T : class
     {
-        Task<bool> SendMessageAsync(T message);
+        Task<bool> SendMessageAsync(T message, bool isFifo = false);
         Task<bool> SendMessagesAsync(IEnumerable<T> messages);
     }
 
@@ -27,9 +27,9 @@ namespace Xerris.DotNet.Core.Aws.Sqs
             this.sqsClient = sqsClient;
         }
 
-        public async Task<bool> SendMessageAsync(T message)
+        public async Task<bool> SendMessageAsync(T message, bool isFifo = false)
         {
-            var request = new SendMessageRequest(SqsQueueUrl, message.ToJson());
+            var request = new SendMessageRequest(SqsQueueUrl, message.ToJson()).ApplyFifo(isFifo);
             var response = await sqsClient.SendMessageAsync(request).ConfigureAwait(false);
             
             var successful = response.HttpStatusCode == HttpStatusCode.OK;

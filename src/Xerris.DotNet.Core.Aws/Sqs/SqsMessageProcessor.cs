@@ -20,16 +20,14 @@ namespace Xerris.DotNet.Core.Aws.Sqs
             await consumer.Process(messages);
         }
 
-        public async Task<bool> SendMessageAsync(T message)
+        public async Task SendMessageAsync(T message)
         {
-            var success = await publisher.SendMessageAsync(message);
-            return success;
+            await publisher.SendMessageAsync(message);
         }
 
-        public async Task<bool> SendMessagesAsync(IEnumerable<T> messages)
+        public async Task SendMessagesAsync(IEnumerable<T> messages)
         {
-            var success = await publisher.SendMessagesAsync(messages);
-            return success;
+            await publisher.SendMessagesAsync(messages);
         }   
     }
 }

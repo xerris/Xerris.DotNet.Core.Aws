@@ -40,7 +40,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
         public void CanSendMessage()
         {
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
-            publisher.Setup(x => x.SendMessageAsync(elvis))
+            publisher.Setup(x => x.SendMessageAsync(elvis, false))
                 .ReturnsAsync(true);
         
             processor.SendMessageAsync(elvis);
