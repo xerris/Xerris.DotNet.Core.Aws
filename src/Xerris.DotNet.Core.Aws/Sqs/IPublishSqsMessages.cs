@@ -14,24 +14,22 @@ namespace Xerris.DotNet.Core.Aws.Sqs
     {
         Task<bool> SendMessageAsync(T message);
         Task<bool> SendMessagesAsync(IEnumerable<T> messages);
-        bool IsFifo { get; set; }
     }
 
     public class SqsPublisher<T> : IPublishSqsMessages<T> where T : class
     {
-        
         private readonly IAmazonSQS sqsClient;
         protected string SqsQueueUrl { get; set; }
-        public bool IsFifo { get; set; }
 
-        public SqsPublisher(IAmazonSQS sqsClient)
+        public SqsPublisher(IAmazonSQS sqsClient, string sqsQueueUrl)
         {
             this.sqsClient = sqsClient;
+            SqsQueueUrl = sqsQueueUrl;
         }
 
         public virtual async Task<bool> SendMessageAsync(T message)
         {
-            var request = new SendMessageRequest(SqsQueueUrl, message.ToJson()).ApplyFifo(IsFifo);
+            var request = new SendMessageRequest(SqsQueueUrl, message.ToJson()).ApplyFifo(SqsQueueUrl);
             var response = await sqsClient.SendMessageAsync(request).ConfigureAwait(false);
             
             var successful = response.HttpStatusCode == HttpStatusCode.OK;
@@ -45,7 +43,8 @@ namespace Xerris.DotNet.Core.Aws.Sqs
 
         public virtual async Task<bool> SendMessagesAsync(IEnumerable<T> messages)
         {
-            var batchRequestEntries = messages.Select((m, i) => new SendMessageBatchRequestEntry(i.ToString(), m.ToJson()).ApplyFifo(IsFifo)).ToList();
+            var batchRequestEntries = messages.Select((m, i) => new SendMessageBatchRequestEntry(i.ToString(), m.ToJson())
+                .ApplyFifo(SqsQueueUrl)).ToList();
             var request = new SendMessageBatchRequest(SqsQueueUrl, batchRequestEntries);
             var response = await sqsClient.SendMessageBatchAsync(request).ConfigureAwait(false);
             var successful = response.HttpStatusCode == HttpStatusCode.OK;

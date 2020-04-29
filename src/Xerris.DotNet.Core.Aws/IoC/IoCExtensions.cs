@@ -45,7 +45,7 @@ namespace Xerris.DotNet.Core.Aws.IoC
         {
             collection.AddAWSService<IAmazonSQS>();
             collection.AddSingleton<IEventSink>(
-                services => new SqsApplicationEventSink(sqsUrlFunc(),services.GetService<IAmazonSQS>()));
+                services => new SqsApplicationEventSink(services.GetService<IAmazonSQS>(), sqsUrlFunc()));
             collection.AddSingleton<IMonitorBuilder, MonitorBuilder>();
             return collection;
         }

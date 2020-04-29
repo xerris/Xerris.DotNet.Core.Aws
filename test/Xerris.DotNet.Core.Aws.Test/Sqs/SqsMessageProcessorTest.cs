@@ -25,8 +25,6 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
         [Fact]
         public void CanProcessMessage()
         {
-            publisher.SetupSet(x => x.IsFifo = false).Verifiable();
-            
             var processor = new PersonProcessor(consumer.Object, publisher.Object);
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
             var message = new SQSEvent.SQSMessage {Body = elvis.ToJson()};
@@ -39,22 +37,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
         [Fact]
         public void CanSendMessage()
         {
-            publisher.SetupSet(x => x.IsFifo = false);
-            
             var processor = new PersonProcessor(consumer.Object, publisher.Object);
-            var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
-            publisher.Setup(x => x.SendMessageAsync(elvis))
-                     .ReturnsAsync(true);
-        
-            processor.SendMessageAsync(elvis);
-        }
-
-        [Fact]
-        public void CanSendMessageFifo()
-        {
-            publisher.SetupSet(x => x.IsFifo = true);
-            
-            var processor = new PersonProcessor(consumer.Object, publisher.Object, true);
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
             publisher.Setup(x => x.SendMessageAsync(elvis))
                      .ReturnsAsync(true);
@@ -65,22 +48,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
         [Fact]
         public void CanSendMessages()
         {
-            publisher.SetupSet(x => x.IsFifo = false);
-            
             var processor = new PersonProcessor(consumer.Object, publisher.Object);
-            var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
-            publisher.Setup(x => x.SendMessagesAsync(new[] {elvis}))
-                .ReturnsAsync(true);
-        
-            processor.SendMessagesAsync(new[] {elvis});
-        }
-
-        [Fact]
-        public void CanSendMessagesFifo()
-        {
-            publisher.SetupSet(x => x.IsFifo = true);
-            
-            var processor = new PersonProcessor(consumer.Object, publisher.Object, true);
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
             publisher.Setup(x => x.SendMessagesAsync(new[] {elvis}))
                 .ReturnsAsync(true);

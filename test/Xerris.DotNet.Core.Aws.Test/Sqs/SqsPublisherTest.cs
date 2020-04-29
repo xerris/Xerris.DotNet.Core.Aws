@@ -15,18 +15,30 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
     {
         private readonly MockRepository mocks;
         private readonly Mock<IAmazonSQS> sqsClient;
-        private readonly PersonPublisher publisher;
 
         public SqsPublisherTest()
         {
             mocks = new MockRepository(MockBehavior.Strict);
             sqsClient = mocks.Create<IAmazonSQS>();
-            publisher = new PersonPublisher(sqsClient.Object);
         }
 
         [Fact]
         public async Task CanSendMessage()
         {
+            var publisher = new PersonPublisher(sqsClient.Object, "sqs.com");
+            var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
+            var response = new SendMessageResponse();
+            sqsClient.Setup(x => x.SendMessageAsync(It.Is<SendMessageRequest>(m => Matches(m, elvis)), 
+                It.IsNotNull<CancellationToken>()))
+                     .ReturnsAsync(response);
+
+            await publisher.SendMessageAsync(elvis);
+        }
+
+        [Fact]
+        public async Task CanSendMessageFifo()
+        {
+            var publisher = new PersonPublisher(sqsClient.Object, "sqs.com.fifo");
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
             var response = new SendMessageResponse();
             sqsClient.Setup(x => x.SendMessageAsync(It.Is<SendMessageRequest>(m => Matches(m, elvis)), 
@@ -39,6 +51,19 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
         [Fact]
         public async Task CanSendMessages()
         {
+            var publisher = new PersonPublisher(sqsClient.Object, "sqs.com");
+            var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
+            var response = new SendMessageBatchResponse();
+            sqsClient.Setup(x => x.SendMessageBatchAsync(It.IsNotNull<SendMessageBatchRequest>(), It.IsNotNull<CancellationToken>()))
+                .ReturnsAsync(response);
+
+            await publisher.SendMessagesAsync(new[] {elvis});
+        }
+
+        [Fact]
+        public async Task CanSendMessagesFifo()
+        {
+            var publisher = new PersonPublisher(sqsClient.Object, "sqs.com.fifo");
             var elvis = new PersonMessage {Id = Guid.NewGuid(), Name = "Elvis"};
             var response = new SendMessageBatchResponse();
             sqsClient.Setup(x => x.SendMessageBatchAsync(It.IsNotNull<SendMessageBatchRequest>(), It.IsNotNull<CancellationToken>()))

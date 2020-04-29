@@ -12,9 +12,8 @@ namespace Xerris.DotNet.Core.Aws.Sqs
 
     public class SqsApplicationEventSink : SqsPublisher<ApplicationEvent>, IEventSink
     {
-        public SqsApplicationEventSink(string sqsQueueUrl, IAmazonSQS sqsClient) : base(sqsClient)
+        public SqsApplicationEventSink(IAmazonSQS sqsClient, string sqsQueueUrl) : base(sqsClient, sqsQueueUrl)
         {
-            SqsQueueUrl = sqsQueueUrl;
         }
 
         public async Task SendAsync(ApplicationEvent applicationEvent)

@@ -5,9 +5,9 @@ namespace Xerris.DotNet.Core.Aws.Sqs
 {
     public static class SqsExtensions
     {
-        public static SendMessageRequest ApplyFifo(this SendMessageRequest request, bool isFifo)
+        public static SendMessageRequest ApplyFifo(this SendMessageRequest request, string url)
         {
-            if (isFifo)
+            if (url.EndsWith(".fifo", StringComparison.InvariantCulture))
             {
                 var id = Guid.NewGuid().ToString("D");
                 request.MessageGroupId = id;
@@ -16,9 +16,9 @@ namespace Xerris.DotNet.Core.Aws.Sqs
             return request;
         }
 
-        public static SendMessageBatchRequestEntry ApplyFifo(this SendMessageBatchRequestEntry request, bool isFifo)
+        public static SendMessageBatchRequestEntry ApplyFifo(this SendMessageBatchRequestEntry request, string url)
         {
-            if (isFifo)
+            if (url.EndsWith(".fifo", StringComparison.InvariantCulture))
             {
                 var id = Guid.NewGuid().ToString("D");
                 request.MessageGroupId = id;
