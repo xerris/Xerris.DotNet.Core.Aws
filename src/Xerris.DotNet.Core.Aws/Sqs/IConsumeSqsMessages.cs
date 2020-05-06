@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using Amazon.Lambda.SQSEvents;
@@ -7,6 +8,7 @@ using Amazon.SQS;
 using Amazon.SQS.Model;
 using Serilog;
 using Xerris.DotNet.Core.Extensions;
+using Xerris.DotNet.Core.Time;
 
 namespace Xerris.DotNet.Core.Aws.Sqs
 {
@@ -34,6 +36,12 @@ namespace Xerris.DotNet.Core.Aws.Sqs
         {
             foreach (var eachMessage in messages)
             {
+                if (eachMessage.IsKeepWarm())
+                {
+                    Log.Debug("keep-warm invoked at: {Now}", Clock.Utc.Now.ToLongDateString());
+                    continue;
+                } 
+                
                 var body = eachMessage.Body.FromJson<T>();
                 var success = await ExecuteAsync(body);
                 if (success)

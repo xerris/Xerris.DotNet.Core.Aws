@@ -67,6 +67,16 @@ namespace Xerris.DotNet.Core.Aws.Test.Sqs
             sqsClient.Verify(x => x.DeleteMessageAsync(It.IsAny<DeleteMessageRequest>(), new CancellationToken()), Times.Never);
         }
 
+        [Fact]
+        public async Task KeepWarm()
+        {
+            var keepWarm = "{ 'Xerris.DotNet.Aws.keep-warm': true";
+            var processor = new PersonConsumer(sqsClient.Object,SqsUrl, x => Task.FromResult(false));
+            
+            var message = new SQSEvent.SQSMessage {Body = keepWarm};
+            await processor.Process(new[] {message});
+        }
+        
         public void Dispose()
         {
             mocks.VerifyAll();
