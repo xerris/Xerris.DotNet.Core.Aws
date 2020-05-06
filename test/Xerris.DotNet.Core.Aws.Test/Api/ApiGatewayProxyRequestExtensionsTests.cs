@@ -112,5 +112,20 @@ namespace Xerris.DotNet.Core.Aws.Test.Api
             var request = new APIGatewayProxyRequest {PathParameters = pathParameters};
             request.GetPathParameter("kaka").Should().BeNull();
         }
+
+        [Theory]
+        [InlineData("x-keep-warm", "true", true)]
+        [InlineData("x-keep-warm", "True", true)]
+        [InlineData("x-keep-warm", "False", false)]
+        [InlineData("x-keep-warm", "false", false)]
+        [InlineData("x-kaka", "True", false)]
+        [InlineData("x-kaka", "true", false)]
+        [InlineData("", "true", false)]
+        public void IsKeepWarm(string key, string value, bool isWarm)
+        {
+            var headers = new Dictionary<string, string> {{key, value}};
+            var request = new APIGatewayProxyRequest {Headers = headers};
+            request.IsKeepWarm().Should().Be(isWarm);
+        }
     }
 }

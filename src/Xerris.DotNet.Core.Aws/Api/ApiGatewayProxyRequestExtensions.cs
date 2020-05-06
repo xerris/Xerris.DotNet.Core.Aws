@@ -50,5 +50,18 @@ namespace Xerris.DotNet.Core.Aws.Api
             request.Headers.TryGetValue(key, out var value);
             return value;
         }
+        
+        public static bool IsKeepWarm(this APIGatewayProxyRequest input)
+        {
+            try
+            {
+                string str;
+                return input.Headers.TryGetValue("x-keep-warm", out str) && bool.Parse(str);
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
