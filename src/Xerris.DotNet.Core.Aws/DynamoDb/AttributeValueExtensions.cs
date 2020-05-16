@@ -9,6 +9,11 @@ namespace Xerris.DotNet.Core.Aws.DynamoDb
 {
     public static class AttributeValueExtensions
     {
+        public static T Convert<T>(this AttributeValue value, Func<AttributeValue, T> converter)
+        {
+            return converter(value);
+        }
+        
         public static string Str(this IReadOnlyDictionary<string, AttributeValue> value, string key, bool enforce = true)
         {
             if (!enforce) 
@@ -52,11 +57,6 @@ namespace Xerris.DotNet.Core.Aws.DynamoDb
                     .IsNotEmpty(item.M, $"value at {key} is empty")
                 .Check();
             return converter(item.M);
-        }
-
-        public static T Convert<T>(this AttributeValue value, Func<AttributeValue, T> converter)
-        {
-            return converter(value);
         }
 
         public static DateTime ToDateTime(this AttributeValue value)
