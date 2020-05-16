@@ -46,7 +46,7 @@ namespace Xerris.DotNet.Core.Aws.DynamoDb
             return value[key].L.Select(x => converter(x.M));
         }
 
-        private static T Map<T>(this IReadOnlyDictionary<string, AttributeValue> value, string key, 
+        public static T Map<T>(this IReadOnlyDictionary<string, AttributeValue> value, string key, 
                         Func<IReadOnlyDictionary<string, AttributeValue>, T> converter, bool enforce = false)
         {
             var item = value.ContainsKey(key) ? value[key] : null;
