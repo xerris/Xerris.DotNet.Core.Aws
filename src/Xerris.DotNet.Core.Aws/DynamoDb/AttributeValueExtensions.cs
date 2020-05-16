@@ -30,6 +30,16 @@ namespace Xerris.DotNet.Core.Aws.DynamoDb
             return value[key].S.ToEnum<T>();
         }
 
+        public static double Integer(IReadOnlyDictionary<string, AttributeValue> value, string key)
+        {
+            return int.Parse(value[key].N);
+        }
+
+        public static double Double(this IReadOnlyDictionary<string, AttributeValue> value, string key)
+        {
+            return double.Parse(value[key].N);
+        }
+
         public static T Enum<T>(this IReadOnlyDictionary<string, AttributeValue> value, string key) where T : struct, IConvertible
         {
             return value[key].N.ToEnum<T>();
