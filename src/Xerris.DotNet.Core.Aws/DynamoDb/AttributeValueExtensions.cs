@@ -53,7 +53,8 @@ namespace Xerris.DotNet.Core.Aws.DynamoDb
         public static IEnumerable<T> FromList<T>(this Dictionary<string, AttributeValue> value, string key,
             Func<IReadOnlyDictionary<string, AttributeValue>, T> converter)
         {
-            return value[key].L.Select(x => converter(x.M));
+            return !value.ContainsKey(key) ? Enumerable.Empty<T>() : 
+                    value[key].L.Select(x => converter(x.M));
         }
 
         public static T Map<T>(this IReadOnlyDictionary<string, AttributeValue> value, string key, 
