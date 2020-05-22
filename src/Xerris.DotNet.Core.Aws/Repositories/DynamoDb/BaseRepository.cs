@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Xerris.DotNet.Core.Aws.IoC;
 using Xerris.DotNet.Core.Extensions;
 using DynamoTable=Amazon.DynamoDBv2.DocumentModel;
@@ -25,12 +24,12 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
     
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private static readonly JsonSerializerSettings DynamoDbJsonSerializationSettings =
-                          new JsonSerializerSettings
-                          {
-                              ContractResolver = new DefaultContractResolver(),
-                              NullValueHandling = NullValueHandling.Ignore
-                          };
+        private static readonly JsonSerializerOptions DynamoDbJsonSerializationSettings =
+            new JsonSerializerOptions
+            {
+                IgnoreReadOnlyProperties = true,
+                IgnoreNullValues = true,
+            };
         
         private ITable Table { get; }
         private readonly ILazyProvider<IAmazonDynamoDB> clientProvider;
