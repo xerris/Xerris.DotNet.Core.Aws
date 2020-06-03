@@ -69,7 +69,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Api
         }
 
         [Fact]
-        public void Error()
+        public void Error_String()
         {
             var response = "error".Error();
             
@@ -77,6 +77,19 @@ namespace Xerris.DotNet.Core.Aws.Test.Api
                 .IsNotNull(response, "response")
                 .Check()
                 .IsEqual(response.Body, "error", "error as Json")
+                .IsEqual(response.StatusCode, (int) HttpStatusCode.InternalServerError, "ok")
+                .Check();
+        }
+
+        [Fact]
+        public void Error_Subject()
+        {
+            var response = subject.Error();
+            
+            Validate.Begin()
+                .IsNotNull(response, "response")
+                .Check()
+                .IsEqual(response.Body, subject.ToJson(), "error as Json")
                 .IsEqual(response.StatusCode, (int) HttpStatusCode.InternalServerError, "ok")
                 .Check();
         }
