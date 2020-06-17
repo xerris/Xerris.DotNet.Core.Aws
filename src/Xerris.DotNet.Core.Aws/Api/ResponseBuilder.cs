@@ -81,11 +81,25 @@ namespace Xerris.DotNet.Core.Aws.Api
         {
             return CreateResponse(null, HttpStatusCode.Unauthorized);
         }
+        
+        public static APIGatewayProxyResponse UnAuthorized(this string message)
+        {
+            return CreateResponse(message, HttpStatusCode.Unauthorized);
+        }
 
         public static APIGatewayProxyResponse Warmed(this object called)
         {
-            var payload = new { warmedAt = DateTime.UtcNow.ToString("s")};
-            return Ok(payload);
+            return Ok(new Ack());
+        }
+        
+        private class Ack
+        {
+            public Ack()
+            {
+                WarmedAt = DateTime.UtcNow.ToString("s");
+            }
+            
+            public string WarmedAt { get; set; }
         }
     }
 }
