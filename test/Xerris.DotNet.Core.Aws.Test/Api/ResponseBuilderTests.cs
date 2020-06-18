@@ -128,7 +128,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Api
             Validate.Begin()
                 .IsNotNull(response, "response")
                 .Check()
-                .IsNull(response.Body, "body is null")
+                .IsNotNull(response.Body, "body is null")
                 .IsEqual(response.StatusCode, (int) HttpStatusCode.Unauthorized, "ok")
                 .Check();
         }
