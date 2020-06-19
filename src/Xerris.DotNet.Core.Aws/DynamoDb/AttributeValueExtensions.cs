@@ -30,6 +30,11 @@ namespace Xerris.DotNet.Core.Aws.DynamoDb
             return value[key].S.ToEnum<T>();
         }
 
+        public static bool Bool(IReadOnlyDictionary<string, AttributeValue> value, string key)
+        {
+            return value[key].BOOL;
+        }
+
         public static double Integer(IReadOnlyDictionary<string, AttributeValue> value, string key)
         {
             return int.Parse(value[key].N);
