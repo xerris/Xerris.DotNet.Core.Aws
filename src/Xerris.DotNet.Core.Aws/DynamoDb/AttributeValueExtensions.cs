@@ -25,14 +25,14 @@ namespace Xerris.DotNet.Core.Aws.DynamoDb
             return value[key].S;
         }
 
+        public static bool Bool(this IReadOnlyDictionary<string, AttributeValue> value, string key, bool withDefault = false)
+        {
+            return value.ContainsKey(key) ? value[key].BOOL : withDefault;
+        }
+
         public static T EnumStr<T>(this IReadOnlyDictionary<string, AttributeValue> value, string key) where T : struct, IConvertible
         {
             return value[key].S.ToEnum<T>();
-        }
-
-        public static bool Bool(IReadOnlyDictionary<string, AttributeValue> value, string key)
-        {
-            return value[key].BOOL;
         }
 
         public static double Integer(IReadOnlyDictionary<string, AttributeValue> value, string key)
