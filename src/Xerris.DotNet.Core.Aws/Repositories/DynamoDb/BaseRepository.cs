@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
+using Amazon.DynamoDBv2.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Xerris.DotNet.Core.Aws.IoC;
@@ -116,6 +117,14 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
         public async Task DeleteAsync(T toDelete)
         {
             await Table.DeleteItemAsync(Document.FromJson(toDelete.ToJson(DynamoDbJsonSerializationSettings)));
+        }
+        
+        public async Task<List<Dictionary<string, AttributeValue>>> Query(QueryRequest request)
+        {
+            var client = clientProvider.Create();
+            request.TableName = Table.TableName;
+            var query = await client.QueryAsync(request);
+            return query.Items;
         }
 
         private DynamoDBOperationConfig CreateOperationConfig()
