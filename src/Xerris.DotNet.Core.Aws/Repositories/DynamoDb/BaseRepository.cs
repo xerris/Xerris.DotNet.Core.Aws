@@ -115,7 +115,7 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
             await Table.DeleteItemAsync(Document.FromJson(toDelete.ToJson(DynamoDbJsonSerializationSettings)));
         }
 
-        public async Task<List<Dictionary<string, AttributeValue>>> Query(QueryRequest request)
+        public async Task<List<Dictionary<string, AttributeValue>>> QueryAsync(QueryRequest request)
         {
             var client = clientProvider.Create();
             request.TableName = Table.TableName;
