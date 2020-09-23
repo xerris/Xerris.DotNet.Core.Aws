@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Xerris.DotNet.Core.Aws.IoC;
 using Xerris.DotNet.Core.Extensions;
-using DynamoTable=Amazon.DynamoDBv2.DocumentModel;
+using DynamoTable = Amazon.DynamoDBv2.DocumentModel;
 
 namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
 {
@@ -21,32 +21,32 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
         Task<IEnumerable<TU>> FindAllAsync<TU>();
         Task<TU> FindOneAsync<TU>(ScanCondition where, bool allowNull = true);
     }
-    
+
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private static readonly JsonSerializerOptions DynamoDbJsonSerializationSettings =
-            new JsonSerializerOptions
+        private static readonly JsonSerializerSettings DynamoDbJsonSerializationSettings =
+            new JsonSerializerSettings
             {
-                IgnoreReadOnlyProperties = true,
-                IgnoreNullValues = true,
+                ContractResolver = new DefaultContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore
             };
-        
+
         private ITable Table { get; }
         private readonly ILazyProvider<IAmazonDynamoDB> clientProvider;
-        
+
         protected BaseRepository(ILazyProvider<IAmazonDynamoDB> clientProvider, string tableName)
         {
             this.clientProvider = clientProvider;
             Table = TableProxy.Create(clientProvider, tableName);
         }
-        
-        protected BaseRepository(IAmazonDynamoDB client, string tableName) : this(new LazyProvider<IAmazonDynamoDB>(() => client), tableName)
+
+        protected BaseRepository(IAmazonDynamoDB client, string tableName) : this(new LazyProvider<IAmazonDynamoDB>(()=>client), tableName)
         {
         }
 
         protected BaseRepository(IAmazonDynamoDB client, ITable table)
         {
-            clientProvider = new LazyProvider<IAmazonDynamoDB>(() => client);
+            clientProvider = new LazyProvider<IAmazonDynamoDB>(()=>client);
             Table = table;
         }
 
@@ -73,8 +73,10 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
                     var entities = await search.GetNextSetAsync();
                     if (entities.Any()) return entities.FirstOrDefault();
                 }
+
                 if (allowNull) return default;
             }
+
             throw new NotFoundException<T>(where);
         }
 
@@ -99,20 +101,17 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
             return await FindAllAsync<TU>(new[] {where});
         }
 
-        public async Task<IEnumerable<TU>> FindAllAsync<TU>()
-        {
-            return await FindAllAsync<TU>(Enumerable.Empty<ScanCondition>());
-        }
+        public async Task<IEnumerable<TU>> FindAllAsync<TU>()=>await FindAllAsync<TU>(Enumerable.Empty<ScanCondition>());
 
         public async Task SaveAsync(T toUpdate)
         {
-            var item = Document.FromJson(toUpdate.ToJson(DynamoDbJsonSerializationSettings));
+            var item = DynamoTable.Document.FromJson(toUpdate.ToJson(DynamoDbJsonSerializationSettings));
             await Table.PutItemAsync(item);
         }
 
         public async Task DeleteAsync(T toDelete)
         {
-            await Table.DeleteItemAsync(Document.FromJson(toDelete.ToJson(DynamoDbJsonSerializationSettings)));
+            await Table.DeleteItemAsync(DynamoTable.Document.FromJson(toDelete.ToJson(DynamoDbJsonSerializationSettings)));
         }
 
         public async Task<List<Dictionary<string, AttributeValue>>> QueryAsync(QueryRequest request)
@@ -123,14 +122,8 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
             return query.Items;
         }
 
-        private DynamoDBOperationConfig CreateOperationConfig()
-        {
-            return new DynamoDBOperationConfig { OverrideTableName = Table.TableName };
-        }
+        private DynamoDBOperationConfig CreateOperationConfig()=>new DynamoDBOperationConfig {OverrideTableName = Table.TableName};
 
-        protected ScanCondition WhereEquals(string field, string value)
-        {
-            return new ScanCondition(field, ScanOperator.Equal, value);
-        }
+        protected ScanCondition WhereEquals(string field, string value)=>new ScanCondition(field, DynamoTable.ScanOperator.Equal, value);
     }
 }
