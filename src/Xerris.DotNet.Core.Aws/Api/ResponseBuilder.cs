@@ -77,9 +77,9 @@ namespace Xerris.DotNet.Core.Aws.Api
             return CreateResponse(payload, HttpStatusCode.BadRequest);
         }
 
-        public static APIGatewayProxyResponse UnAuthorized(this object called)
+        public static APIGatewayProxyResponse UnAuthorized<T>(this T payload)
         {
-            return CreateResponse(null, HttpStatusCode.Unauthorized);
+            return CreateResponse(payload.ToJson(), HttpStatusCode.Unauthorized);
         }
         
         public static APIGatewayProxyResponse UnAuthorized(this string message)
