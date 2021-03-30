@@ -26,7 +26,7 @@ namespace Xerris.DotNet.Core.Aws.Api
         public static string GetQueryString(this APIGatewayProxyRequest request, string key)
         {
             if (request.QueryStringParameters.IsNullOrEmpty()) return null;
-            Validate.Begin().IsNotEmpty(key, "query string key").Check();
+            Validate.Begin().IsNotEmpty(key, $"query string key: {key}").Check();
             request.QueryStringParameters.TryGetValue(key, out var value);
             return value;
         }
@@ -34,7 +34,7 @@ namespace Xerris.DotNet.Core.Aws.Api
         public static string GetPathParameter(this APIGatewayProxyRequest request, string key)
         {
             if (request.PathParameters.IsNullOrEmpty()) return null;
-            Validate.Begin().IsNotEmpty(key, "path parameter").Check();
+            Validate.Begin().IsNotEmpty(key, $"path parameter: {key}").Check();
             request.PathParameters.TryGetValue(key, out var value);
             return value;
         }
@@ -55,8 +55,7 @@ namespace Xerris.DotNet.Core.Aws.Api
         {
             try
             {
-                string str;
-                return input.Headers.TryGetValue("x-keep-warm", out str) && bool.Parse(str);
+                return input.Headers.TryGetValue("x-keep-warm", out var str) && bool.Parse(str);
             }
             catch
             {
