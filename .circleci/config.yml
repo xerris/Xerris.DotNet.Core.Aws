@@ -1,0 +1,73 @@
+anchors:
+  setup-node: &setup-node
+    run:
+      name: Setup node
+      command: |
+        curl -sL https://deb.nodesource.com/setup_12.x |  bash -
+        apt update && apt-get -q -y install nodejs
+
+  configure-build-environment: &configure-build-environment
+    run:
+      name: Configure
+      command: |
+        sed "s/GITHUB_TOKEN/$GITHUB_AUTH_TOKEN/g" .nuget.config > nuget.config
+        npm install .
+
+  configure-nuget-version: &configure-nuget_version
+    run:
+      name: Configure nuget Version
+      command: |
+        file=version.json
+        echo $CIRCLE_TAG >> $file
+
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-bionic
+    steps:
+      - *setup-node
+      - checkout
+      - *configure-build-environment
+      - run:
+          name: Compile
+          command: npm run gulp Build
+      - run:
+          name: Run Tests
+          working_directory: .
+          command: npm run gulp Test
+      - store_test_results:
+          path: ./TestResults
+  deploy:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-bionic
+    steps:
+      - *setup-node
+      - checkout
+      - *configure-build-environment
+      - *configure-nuget_version
+      - run:
+          name: Push
+          command: |
+            npm run gulp Push
+
+workflows:
+  version: 2
+  ci-main:
+    jobs:
+      - build:
+          context: xerris-core
+          filters:
+            branches:
+              only:
+                - main
+  ci-deploy:
+    jobs:
+      - deploy:
+          context: xerris-core
+          filters:
+            tags:
+              only:
+                - /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
+            branches:
+              ignore: /.*/

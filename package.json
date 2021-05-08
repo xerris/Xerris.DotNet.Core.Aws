@@ -10,6 +10,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "del": "^5.1.0",
+    "fs": "^0.0.1-security",
     "mkdirp": "^0.5.1",
     "path": "^0.12.7"
   },
