@@ -7,20 +7,20 @@
 
     <ItemGroup>
         <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.4.0" />
-        <PackageReference Include="Amazon.Lambda.Core" Version="1.2.0" />
-        <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.8.0" />
-        <PackageReference Include="Amazon.Lambda.SQSEvents" Version="1.2.0" />
-        <PackageReference Include="AWS.Logger.Core" Version="2.1.0" />
-        <PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="2.1.0" />
-        <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.7.0.2" />
-        <PackageReference Include="AWSSDK.CognitoIdentity" Version="3.7.0.2" />
-        <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.0.2" />
-        <PackageReference Include="AWSSDK.Core" Version="3.7.0.3" />
-        <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.3" />
+        <PackageReference Include="Amazon.Lambda.Core" Version="2.0.0" />
+        <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="2.0.0" />
+        <PackageReference Include="Amazon.Lambda.SQSEvents" Version="2.0.0" />
+        <PackageReference Include="AWS.Logger.Core" Version="3.0.0" />
+        <PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="2.2.1" />
+        <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.7.0.17" />
+        <PackageReference Include="AWSSDK.CognitoIdentity" Version="3.7.0.17" />
+        <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.0.18" />
+        <PackageReference Include="AWSSDK.Core" Version="3.7.0.18" />
+        <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.18" />
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.0.1" />
-        <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.0.2" />
-        <PackageReference Include="AWSSDK.SQS" Version="3.7.0.3" />
-        <PackageReference Include="Xerris.DotNet.Core" Version="0.0.87" />
+        <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.0.17" />
+        <PackageReference Include="AWSSDK.SQS" Version="3.7.0.18" />
+        <PackageReference Include="Xerris.DotNet.Core" Version="0.0.89" />
     </ItemGroup>
 
 </Project>
