@@ -35,10 +35,8 @@ function _test() {
 }
 
 function _distDir() {
-    return new Promise((resolve, error) => {
-        del(['dist'], {force: true}).then(
-            () => { mkdirp('dist', resolve);
-            });
+    return del(['dist'], {force: true}).then(
+        () => { mkdirp('dist').then(made => console.log(`Created ${made} directory`));
     });
 }
 
