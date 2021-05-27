@@ -9,6 +9,12 @@ namespace Xerris.DotNet.Core.Aws.Api
     public static class ApiGatewayProxyRequestExtensions
     {
         public const string Authorization = "Authorization";
+
+        public static APIGatewayProxyRequest Body<T>(this APIGatewayProxyRequest request, T body)
+        {
+            request.Body = body.ToJson();
+            return request;
+        }
         
         public static T Parse<T>(this APIGatewayProxyRequest request) where T : class, new()
         {
