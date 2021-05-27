@@ -24,7 +24,7 @@ namespace Xerris.DotNet.Core.Aws.Api
             }
             catch (Exception e)
             {
-                Log.Error(e, $"Unable to deserialize {typeof(T).Name} from: {request.Body}");
+                Log.Error(e, "Unable to deserialize {typeof(T).Name} from:{@Body}", request.Body);
                 return new T();
             }
         }
