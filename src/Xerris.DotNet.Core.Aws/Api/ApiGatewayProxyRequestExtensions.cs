@@ -10,7 +10,7 @@ namespace Xerris.DotNet.Core.Aws.Api
     {
         public const string Authorization = "Authorization";
 
-        public static APIGatewayProxyRequest Body<T>(this APIGatewayProxyRequest request, T body)
+        public static APIGatewayProxyRequest WithBody<T>(this APIGatewayProxyRequest request, T body)
         {
             request.Body = body.ToJson();
             return request;
