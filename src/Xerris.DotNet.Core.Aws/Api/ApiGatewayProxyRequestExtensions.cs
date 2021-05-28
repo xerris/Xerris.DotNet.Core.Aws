@@ -28,6 +28,19 @@ namespace Xerris.DotNet.Core.Aws.Api
                 return new T();
             }
         }
+        
+        public static T Parse<T>(this APIGatewayProxyResponse response) where T : class, new()
+        {
+            try
+            {
+                return response.Body.FromJson<T>();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Unable to deserialize {typeof(T).Name} from:{@Body}", response.Body);
+                return new T();
+            }
+        }
 
         public static string GetQueryString(this APIGatewayProxyRequest request, string key)
         {
