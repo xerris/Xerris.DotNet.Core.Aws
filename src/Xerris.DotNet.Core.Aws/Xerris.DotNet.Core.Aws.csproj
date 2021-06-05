@@ -20,7 +20,7 @@
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.0.1" />
         <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.0.29" />
         <PackageReference Include="AWSSDK.SQS" Version="3.7.0.30" />
-        <PackageReference Include="Xerris.DotNet.Core" Version="0.0.95" />
+        <PackageReference Include="Xerris.DotNet.Core" Version="0.0.96" />
     </ItemGroup>
 
 </Project>
