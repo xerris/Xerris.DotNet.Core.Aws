@@ -13,7 +13,7 @@ namespace Xerris.DotNet.Core.Aws.Repositories.DynamoDb
         private TableProxy(ILazyProvider<IAmazonDynamoDB> client, string tableName)
         {
             this.client = client;
-            this.TableName = tableName;
+            TableName = tableName;
         }
 
         private Table Table
