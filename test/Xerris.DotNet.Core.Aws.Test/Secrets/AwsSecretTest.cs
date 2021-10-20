@@ -45,7 +45,6 @@ namespace Xerris.DotNet.Core.Aws.Test.Secrets
         {
             const string expected = "this is another secret";
 
-
             using var stream = new MemoryStream();
             var s = Convert.ToBase64String(Encoding.UTF8.GetBytes(expected));
             stream.Write(Encoding.UTF8.GetBytes(s));
@@ -64,18 +63,23 @@ namespace Xerris.DotNet.Core.Aws.Test.Secrets
         }
 
         [Fact]
-        public void ShouldThrowSecretException()
+        public async void ShouldThrowSecretException()
         {
             client.Setup(c =>
                     c.GetSecretValueAsync(It.Is<GetSecretValueRequest>(r => r.SecretId == SecretId),
                         CancellationToken.None))
                 .Throws(new ApplicationException("bad things happen"));
 
-            Func<Task> act = async () => await systemUnderTest.GetSecretAsync();
-            act.Should().Throw<SecretException>()
-                .Where(e => e.Message.Contains(SecretId, StringComparison.Ordinal)
-                            && e.Message.Contains(RegionEndpoint.USEast2.DisplayName, StringComparison.Ordinal))
-                .WithInnerException<ApplicationException>().WithMessage("bad things happen");
+            try
+            {
+                await systemUnderTest.GetSecretAsync();
+                throw new Exception("Should throw SecretException");
+            }
+            catch (SecretException ex)
+            {
+                ex.Message.Should().Contain(SecretId);
+                ex.Message.Should().Contain(RegionEndpoint.USEast2.DisplayName);
+            }
         }
 
         [Fact]
