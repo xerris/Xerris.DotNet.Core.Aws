@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using Amazon.Lambda.APIGatewayEvents;
+using Newtonsoft.Json;
 using Xerris.DotNet.Core.Extensions;
 
 namespace Xerris.DotNet.Core.Aws.Api
@@ -32,19 +33,19 @@ namespace Xerris.DotNet.Core.Aws.Api
             return CreateResponse(payload, HttpStatusCode.OK);
         }
 
-        public static APIGatewayProxyResponse Ok<T>(this T payload)
+        public static APIGatewayProxyResponse Ok<T>(this T payload, JsonSerializerSettings settings = null)
         {
-            return CreateResponse(payload.ToJson(), HttpStatusCode.OK);
+            return CreateResponse(payload.ToJson(settings), HttpStatusCode.OK);
         }
 
-        public static APIGatewayProxyResponse Created<T>(this T payload)
+        public static APIGatewayProxyResponse Created<T>(this T payload, JsonSerializerSettings settings = null)
         {
-            return CreateResponse(payload.ToJson(), HttpStatusCode.Created);
+            return CreateResponse(payload.ToJson(settings), HttpStatusCode.Created);
         }
 
-        public static APIGatewayProxyResponse Accepted<T>(this T payload)
+        public static APIGatewayProxyResponse Accepted<T>(this T payload, JsonSerializerSettings settings = null)
         {
-            return CreateResponse(payload.ToJson(), HttpStatusCode.Accepted);
+            return CreateResponse(payload.ToJson(settings), HttpStatusCode.Accepted);
         }
         
         public static APIGatewayProxyResponse Error(this string payload)
@@ -52,9 +53,9 @@ namespace Xerris.DotNet.Core.Aws.Api
             return CreateResponse(payload, HttpStatusCode.InternalServerError);
         }
         
-        public static APIGatewayProxyResponse Error<T>(this T payload)
+        public static APIGatewayProxyResponse Error<T>(this T payload, JsonSerializerSettings settings = null)
         {
-            return CreateResponse(payload.ToJson(), HttpStatusCode.InternalServerError);
+            return CreateResponse(payload.ToJson(settings), HttpStatusCode.InternalServerError);
         }
 
         public static APIGatewayProxyResponse NotFound(this string payload)
@@ -62,14 +63,14 @@ namespace Xerris.DotNet.Core.Aws.Api
             return CreateResponse(payload, HttpStatusCode.NotFound);
         }
 
-        public static APIGatewayProxyResponse NotFound<T>(this T payload)
+        public static APIGatewayProxyResponse NotFound<T>(this T payload, JsonSerializerSettings settings = null)
         {
-            return CreateResponse(payload.ToJson(), HttpStatusCode.NotFound);
+            return CreateResponse(payload.ToJson(settings), HttpStatusCode.NotFound);
         }
 
-        public static APIGatewayProxyResponse BadRequest<T>(this T payload)
+        public static APIGatewayProxyResponse BadRequest<T>(this T payload, JsonSerializerSettings settings = null)
         {
-            return CreateResponse(payload.ToJson(), HttpStatusCode.BadRequest);
+            return CreateResponse(payload.ToJson(settings), HttpStatusCode.BadRequest);
         }
 
         public static APIGatewayProxyResponse BadRequest(this string payload)
@@ -77,9 +78,9 @@ namespace Xerris.DotNet.Core.Aws.Api
             return CreateResponse(payload, HttpStatusCode.BadRequest);
         }
 
-        public static APIGatewayProxyResponse UnAuthorized<T>(this T payload)
+        public static APIGatewayProxyResponse UnAuthorized<T>(this T payload, JsonSerializerSettings settings = null)
         {
-            return CreateResponse(payload.ToJson(), HttpStatusCode.Unauthorized);
+            return CreateResponse(payload.ToJson(settings), HttpStatusCode.Unauthorized);
         }
         
         public static APIGatewayProxyResponse UnAuthorized(this string message)
