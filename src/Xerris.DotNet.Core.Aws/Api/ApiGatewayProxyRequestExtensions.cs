@@ -16,7 +16,7 @@ namespace Xerris.DotNet.Core.Aws.Api
             return request;
         }
         
-        public static T Parse<T>(this APIGatewayProxyRequest request) where T : class, new()
+        public static T Parse<T>(this APIGatewayProxyRequest request, T defaultValue = null) where T : class
         {
             try
             {
@@ -24,12 +24,13 @@ namespace Xerris.DotNet.Core.Aws.Api
             }
             catch (Exception e)
             {
-                Log.Error(e, "Unable to deserialize {typeof(T).Name} from:{@Body}", request.Body);
-                return new T();
+                if (defaultValue == null) throw;
+                Log.Error(e, "Unable to deserialize {Name} from:{Body}",  typeof(T).Name, request.Body);
+                return defaultValue;
             }
         }
         
-        public static T Parse<T>(this APIGatewayProxyResponse response) where T : class, new()
+        public static T Parse<T>(this APIGatewayProxyResponse response, T defaultValue = null) where T : class
         {
             try
             {
@@ -37,8 +38,9 @@ namespace Xerris.DotNet.Core.Aws.Api
             }
             catch (Exception e)
             {
-                Log.Error(e, "Unable to deserialize {typeof(T).Name} from:{@Body}", response.Body);
-                return new T();
+                if (defaultValue == null) throw;
+                Log.Error(e, "Unable to deserialize {Name} from:{Body}", typeof(T).Name,response.Body);
+                return defaultValue;
             }
         }
 

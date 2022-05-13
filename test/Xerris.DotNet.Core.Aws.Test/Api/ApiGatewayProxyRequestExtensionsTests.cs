@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Amazon.Lambda.APIGatewayEvents;
 using FluentAssertions;
@@ -25,7 +26,18 @@ namespace Xerris.DotNet.Core.Aws.Test.Api
             const string foo = "hi, I'm not a foo";
             var request = new APIGatewayProxyRequest {Body = foo };
 
-            request.Parse<Foo>().Should().BeEquivalentTo(new Foo());
+            Func<Foo> act = () => request.Parse<Foo>();
+            act.Should().Throw<Exception>();
+        }
+        
+        [Fact]
+        public void Parse_NotAFooWithDefault()
+        {
+            const string foo = "hi, I'm not a foo";
+            var request = new APIGatewayProxyRequest {Body = foo };
+            var  expected = new Foo();
+            var actual = request.Parse(expected);
+            actual.Should().BeSameAs(expected);
         }
         
         [Fact]
