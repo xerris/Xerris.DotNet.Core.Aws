@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <LangVersion>8</LangVersion>
     </PropertyGroup>
 
@@ -9,16 +9,16 @@
         <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.4.1" />
         <PackageReference Include="Amazon.Lambda.SQSEvents" Version="2.1.0" />
         <PackageReference Include="AWS.Logger.Core" Version="3.1.0" />
-        <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.7.2.52" />
-        <PackageReference Include="AWSSDK.CognitoIdentity" Version="3.7.0.158" />
-        <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.2.22" />
-        <PackageReference Include="AWSSDK.Core" Version="3.7.11.2" />
-        <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.3.34" />
+        <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.7.2.64" />
+        <PackageReference Include="AWSSDK.CognitoIdentity" Version="3.7.0.169" />
+        <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.4.2" />
+        <PackageReference Include="AWSSDK.Core" Version="3.7.11.13" />
+        <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.3.45" />
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
-        <PackageReference Include="AWSSDK.Lambda" Version="3.7.13" />
-        <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.2.42" />
-        <PackageReference Include="AWSSDK.SQS" Version="3.7.2.55" />
-        <PackageReference Include="Xerris.DotNet.Core" Version="0.1.0" />
+        <PackageReference Include="AWSSDK.Lambda" Version="3.7.13.11" />
+        <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.2.53" />
+        <PackageReference Include="AWSSDK.SQS" Version="3.7.2.66" />
+        <PackageReference Include="Xerris.DotNet.Core" Version="0.1.2" />
     </ItemGroup>
 
 </Project>
