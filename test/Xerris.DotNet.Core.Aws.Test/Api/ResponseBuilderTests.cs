@@ -132,5 +132,18 @@ namespace Xerris.DotNet.Core.Aws.Test.Api
                 .IsEqual(response.StatusCode, (int) HttpStatusCode.Unauthorized, "ok")
                 .Check();
         }
+
+        [Fact]
+        public void Forbidden()
+        {
+            var response = "forbidden".Forbidden();
+
+            Validate.Begin()
+                .IsNotNull(response, "response")
+                .Check()
+                .IsNotNull(response.Body, "body is null")
+                .IsEqual(response.StatusCode, (int)HttpStatusCode.Forbidden, "forbidden")
+                .Check();
+        }
     }
 }

@@ -88,6 +88,16 @@ namespace Xerris.DotNet.Core.Aws.Api
             return CreateResponse(message, HttpStatusCode.Unauthorized);
         }
 
+        public static APIGatewayProxyResponse Forbidden<T>(this T payload)
+        {
+            return CreateResponse(payload.ToJson(), HttpStatusCode.Forbidden);
+        }
+
+        public static APIGatewayProxyResponse Forbidden(this string message)
+        {
+            return CreateResponse(message, HttpStatusCode.Forbidden);
+        }
+
         public static APIGatewayProxyResponse Warmed(this object called)
         {
             return Ok(new Ack());
