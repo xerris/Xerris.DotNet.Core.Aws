@@ -72,10 +72,10 @@ namespace Xerris.AWS.Tests.Secrets
                 .Throws(new ApplicationException("bad things happen"));
 
             Func<Task> act = async () => await systemUnderTest.GetSecretAsync();
-            act.Should().Throw<SecretException>()
+            act.Should().ThrowAsync<SecretException>()
                 .Where(e => e.Message.Contains(SecretId, StringComparison.Ordinal)
                             && e.Message.Contains(RegionEndpoint.USEast2.DisplayName, StringComparison.Ordinal))
-                .WithInnerException<ApplicationException>().WithMessage("bad things happen");
+                .WithInnerException(typeof(ApplicationException)).WithMessage("bad things happen");
         }
 
         [Fact]

@@ -26,14 +26,14 @@ namespace Xerris.AWS.Hello.Handlers
         }
 
         [LambdaSerializer(typeof(JsonSerializer))]
-        public async Task<APIGatewayProxyResponse> GetHello(APIGatewayProxyRequest request, ILambdaContext context)
+        public APIGatewayProxyResponse GetHello(APIGatewayProxyRequest request, ILambdaContext context)
         {
             if (request.IsKeepWarm()) return this.Warmed();
-            return "ok".Ok();
+            return  "ok".Ok();
         }
 
         [LambdaSerializer(typeof(JsonSerializer))]
-        public async Task<APIGatewayProxyResponse> SaveHello(APIGatewayProxyRequest request, ILambdaContext context)
+        public APIGatewayProxyResponse SaveHello(APIGatewayProxyRequest request, ILambdaContext context)
         {
             Log.Debug("Calling GET /SaveHello");
             if (request.IsKeepWarm()) this.Warmed();

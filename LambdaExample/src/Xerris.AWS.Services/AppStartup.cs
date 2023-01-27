@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -25,6 +26,11 @@ namespace Xerris.AWS.Services
             collection.AutoRegister(GetType().Assembly);
             
             return builder.Configuration;
+        }
+
+        public void InitializeLogging(IConfiguration configuration, Action<IConfiguration> defaultConfig)
+        {
+            defaultConfig(configuration);
         }
     }
 }

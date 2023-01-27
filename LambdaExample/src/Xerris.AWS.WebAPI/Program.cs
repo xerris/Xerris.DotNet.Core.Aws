@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace Xerris.AWS.WebAPI
@@ -12,7 +14,13 @@ namespace Xerris.AWS.WebAPI
             try
             {
                 Log.Information("Starting web host");
-                CreateWebHostBuilder(args).Build().Run();
+                
+                var builder = WebApplication.CreateBuilder(args);
+                var startup = new Startup(builder.Configuration);
+                var app = builder.Build();
+                startup.Configure(app, builder.Environment);
+
+                app.Run();
                 Environment.Exit(1);
             }
             catch (Exception ex)
@@ -24,14 +32,6 @@ namespace Xerris.AWS.WebAPI
             {
                 Log.CloseAndFlush();
             }
-        }
-
-        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        {
-            return WebHost.CreateDefaultBuilder(args)
-                .UseKestrel()
-                .UseStartup<Startup>()
-                .UseSerilog();
         }
     }
 }

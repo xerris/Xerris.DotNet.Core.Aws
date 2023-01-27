@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
-using Amazon.Lambda.Core;
 using Moq;
 using Xerris.AWS.Hello.Handlers;
 using Xerris.AWS.Services.Services;
@@ -13,7 +12,6 @@ namespace Xerris.AWS.Tests.Handlers
     public class HelloHandlerTest : IDisposable
     {
         private readonly MockRepository mocks;
-        private readonly Mock<ILambdaContext> context;
         private readonly Mock<IHelloService> service;
         private readonly APIGatewayProxyRequest request = new APIGatewayProxyRequest
         {
@@ -28,9 +26,9 @@ namespace Xerris.AWS.Tests.Handlers
         }
 
         [Fact]
-        public async Task GetCustomerList()
+        public  Task GetCustomerList()
         { 
-        
+            return Task.CompletedTask;
         }
 
     

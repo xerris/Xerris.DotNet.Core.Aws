@@ -19,9 +19,9 @@ namespace Xerris.AWS.Tests.Services
         }
 
         [Fact]
-        public async Task GetCustomerList()
+        public Task GetCustomerList()
         {
-
+            return Task.CompletedTask;
         }
 
 
