@@ -31,7 +31,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Secrets
             var systemUnderTest = new SecretProvider(collection, manager.Object);
             var actual = systemUnderTest.GetAwsSecret(configName);
             actual.Should().NotBeNull();
-            actual.Should().BeAssignableTo<CachingSecret>();
+            actual.Should().BeAssignableTo<CachedSecret>();
         }
         
         [Fact]
