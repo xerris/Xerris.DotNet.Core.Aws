@@ -28,7 +28,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Secrets
         {
             const string expected = "this is my secret";
 
-            cache.Setup(c => c.GetSecretString(SecretId)).ReturnsAsync(expected);
+            cache.Setup(c => c.GetSecretString(SecretId, default)).ReturnsAsync(expected);
             var actual = await systemUnderTest.GetSecretAsync();
             actual.Should().Be(expected);
         }
@@ -38,8 +38,8 @@ namespace Xerris.DotNet.Core.Aws.Test.Secrets
         {
             const string expected = "this is another secret";
 
-            cache.Setup(c => c.GetSecretString(SecretId)).ReturnsAsync((string)null);
-            cache.Setup(c => c.GetSecretBinary(SecretId)).ReturnsAsync(Encoding.UTF8.GetBytes(expected));
+            cache.Setup(c => c.GetSecretString(SecretId, default)).ReturnsAsync((string)null);
+            cache.Setup(c => c.GetSecretBinary(SecretId, default)).ReturnsAsync(Encoding.UTF8.GetBytes(expected));
 
             var actual = await systemUnderTest.GetSecretAsync();
             actual.Should().Be(expected);
@@ -48,8 +48,8 @@ namespace Xerris.DotNet.Core.Aws.Test.Secrets
         [Fact]
         public async void ShouldThrowSecretException()
         {
-            cache.Setup(c => c.GetSecretString(SecretId)).ReturnsAsync((string)null);
-            cache.Setup(c => c.GetSecretBinary(SecretId)).Throws<ApplicationException>();
+            cache.Setup(c => c.GetSecretString(SecretId, default)).ReturnsAsync((string)null);
+            cache.Setup(c => c.GetSecretBinary(SecretId, default)).Throws<ApplicationException>();
 
             try
             {
@@ -66,7 +66,7 @@ namespace Xerris.DotNet.Core.Aws.Test.Secrets
         [Fact]
         public async Task ShouldGetSecretByKey()
         {
-            cache.Setup(c => c.GetSecretString(SecretId))
+            cache.Setup(c => c.GetSecretString(SecretId, default))
                 .ReturnsAsync("{\"NutrienReports\":\"correct\",\"de-rp\":\"der-py\"}");
 
             var actual = await systemUnderTest.GetSecretAsync("NutrienReports");
