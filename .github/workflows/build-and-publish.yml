@@ -1,0 +1,17 @@
+name: Publish Xerris.DotNet.Core.Aws
+
+on:
+  pull_request:
+    types: [ closed ]
+    branches: [ main ]
+
+jobs:
+  publish:
+    if: github.event.pull_request.merged == true
+    uses: xerris/xerris-common-workflows/.github/workflows/build-and-publish-to-nuget.yml@main
+    with:
+      csproj-path: './src/Xerris.DotNet.Core.Aws/Xerris.DotNet.Core.Aws.csproj'
+      nuget-package-name: 'xerris.dotnet.core.aws'
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      NUGET_SOURCE_URI: ${{ secrets.NUGET_SOURCE_URI }}

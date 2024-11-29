@@ -1,0 +1,14 @@
+name: CI Build
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  ci-build:
+    uses: xerris/xerris-common-workflows/.github/workflows/ci-build.yml@main
+    with:
+      dotnet-version: '8.0.x'
+      build-configuration: 'Release'
+      artifact-name: 'build-output'

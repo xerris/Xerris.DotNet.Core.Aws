@@ -4,6 +4,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xerris.DotNet.Core.Aws", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xerris.DotNet.Core.Aws.Test", "test\Xerris.DotNet.Core.Aws.Test\Xerris.DotNet.Core.Aws.Test.csproj", "{4CF1D3FF-BE0A-4AEB-987F-D76BCA0CC4B9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{6BA231B1-87FD-4881-AD0A-984F45DCF7D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{CCF48605-B61F-4099-AB12-9BD7E20EA9F0}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-publish.yml = .github\workflows\build-and-publish.yml
+		.github\workflows\ci-build.yml = .github\workflows\ci-build.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +26,8 @@ Global
 		{4CF1D3FF-BE0A-4AEB-987F-D76BCA0CC4B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CF1D3FF-BE0A-4AEB-987F-D76BCA0CC4B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CF1D3FF-BE0A-4AEB-987F-D76BCA0CC4B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CCF48605-B61F-4099-AB12-9BD7E20EA9F0} = {6BA231B1-87FD-4881-AD0A-984F45DCF7D0}
 	EndGlobalSection
 EndGlobal
